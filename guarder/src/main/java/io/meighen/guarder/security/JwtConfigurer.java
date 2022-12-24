@@ -1,6 +1,5 @@
 package io.meighen.guarder.security;
 
-import javax.servlet.Filter;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.DefaultSecurityFilterChain;
@@ -22,8 +21,8 @@ public class JwtConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilt
     }
 
     @Override
-    public void configure(HttpSecurity httpSecurity) throws Exception {
+    public void configure(HttpSecurity httpSecurity) {
         JwtTokenFilter jwtTokenFilter = new JwtTokenFilter(jwtTokenProvider);
-        httpSecurity.addFilterBefore((Filter) jwtTokenFilter, (Class<? extends Filter>) UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

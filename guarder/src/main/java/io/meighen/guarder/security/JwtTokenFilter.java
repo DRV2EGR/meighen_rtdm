@@ -23,11 +23,6 @@ public class JwtTokenFilter implements Filter {
     }
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-
-    }
-
-    @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         String bearerToken = jwtTokenProvider.resolveAccessToken((HttpServletRequest) servletRequest);
         if (bearerToken != null && jwtTokenProvider.validateAccessToken(bearerToken)) {
@@ -37,10 +32,5 @@ public class JwtTokenFilter implements Filter {
         }
 //        else throw new JwtInvalidAccessTokenException();
         filterChain.doFilter(servletRequest, servletResponse);
-    }
-
-    @Override
-    public void destroy() {
-
     }
 }
