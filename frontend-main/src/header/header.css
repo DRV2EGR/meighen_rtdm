@@ -1,0 +1,117 @@
+.nnn {
+    display: none;
+}
+
+.about_s1 {
+    stroke:none;fill-rule:nonzero;fill:rgb(30.19608%,42.745098%,89.019608%);fill-opacity:1;
+}
+
+.about_s2 {
+    stroke:none;fill-rule:nonzero;fill:rgb(30.588236%,47.843137%,70.980394%);fill-opacity:1;
+}
+
+.about_s3 {
+    stroke:none;fill-rule:nonzero;fill:rgb(100%,100%,100%);fill-opacity:1;
+}
+
+.about_s4 {
+    stroke:none;fill-rule:nonzero;fill:rgb(100%,100%,100%);fill-opacity:1;
+}
+
+.dni {
+    display: none !important;
+}
+
+.btn-my-lgn {
+    position: relative;
+    padding: 10px 25px;
+    margin-right: 20px;
+    background: rgba(1, 180, 255, 0.73);
+    text-decoration: none;
+    color: #fff;
+    border-radius: 25px;
+    font-weight: 500;
+    text-shadow: 0 2px 2px rgba(0,0,0,0.25);
+    opacity: 0.75;
+    transition: 0.5s;
+
+    background-image: radial-gradient(
+            farthest-corner at 40px 40px,
+            rgba(1, 255, 73, 0.73) 0%,
+            rgba(1, 180, 255, 0.73) 100%
+    );
+}
+
+.btn-my-lgn:hover {
+    opacity: 1;
+}
+
+.btn-my-lgn::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50px;
+    transform: translateX(-50%);
+    width: 65%;
+    height: 5px;
+    border-radius: 5px;
+    background: rgba(255,255,255,0.5);
+}
+
+.btn-my-reg {
+    position: relative;
+    padding: 10px 25px;
+    background: rgba(1, 180, 255, 0.73);
+    text-decoration: none;
+    color: #fff;
+    border-radius: 25px;
+    font-weight: 500;
+    text-shadow: 0 2px 2px rgba(0,0,0,0.25);
+    opacity: 0.75;
+    transition: 0.5s;
+
+    background-image: radial-gradient(
+            farthest-corner at 50px 60px,
+            rgba(170, 1, 255, 0.62) 0%,
+            rgba(1, 180, 255, 0.73) 100%
+    );
+}
+
+.btn-my-reg:hover {
+    opacity: 1;
+}
+
+.btn-my-reg::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50px;
+    transform: translateX(-10%);
+    width: 65%;
+    height: 5px;
+    border-radius: 5px;
+    background: rgba(255,255,255,0.5);
+}
+
+.colored {
+    background-image: radial-gradient(
+            farthest-corner at 40px 40px,
+            #f35 0%,
+            #43e 100%
+    );
+}
+
+.colored::before {
+    transform: translateX(-55%);
+}
+
+.header-container {
+    margin: 0 !important;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+    width: 100% !important;
+}
+
+.my-header {
+    margin-right: 20px;
+}
