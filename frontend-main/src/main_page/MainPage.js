@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './main_page.css';
+import Header from "../header/Header";
 
 class MainPage extends Component {
     constructor(props) {
@@ -14,6 +15,7 @@ class MainPage extends Component {
         const {code, description} = this.state;
         return (
             <div>
+                <Header />
                 Hello, react!
             </div>
         );
