@@ -88,7 +88,7 @@ class Header extends Component {
                     <div className="container header-container">
                         <div className="d-flex flex-wrap align-items-center justify-content-between my-header">
                             <a href="/"
-                               className="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
+                               className="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none my-logo">
                                 <svg className="bi me-2" width="100" height="100" role="img" aria-label="Bootstrap">
                                     <use xlinkHref="#meighen"></use>
                                 </svg>
