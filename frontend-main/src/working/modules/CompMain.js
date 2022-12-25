@@ -1,10 +1,7 @@
 import React, {Component} from 'react';
-import './main_page.css';
-import Header from "../header/Header";
-import ChoserBar from "../working/choserBar/ChoserBar";
+import ChoserBar from "../choserBar/ChoserBar";
 
-
-class MainPage extends Component {
+class CompMain extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -13,17 +10,14 @@ class MainPage extends Component {
         }
     }
 
-
     render() {
         const {code, description} = this.state;
         return (
             <div>
-                <Header />
-                <br />
+                <ChoserBar />
             </div>
         );
     }
 }
 
-
-export default MainPage;
+export default CompMain;
