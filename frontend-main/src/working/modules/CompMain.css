@@ -1,0 +1,8 @@
+.modules {
+    transition: opacity 0.5s;
+    opacity: 1;
+}
+.modules.hide {
+    opacity: 0;
+    pointer-events:none;
+}
