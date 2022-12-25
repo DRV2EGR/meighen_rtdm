@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './ChoserBar.css';
+import './ColoredIcons.css';
 
 class ChoserBar extends Component {
     constructor(props) {
@@ -45,6 +46,7 @@ class ChoserBar extends Component {
         let arr = ["", "", "", "", ""];
         arr[myAttrs[name]] = "active";
 
+        this.props.stateIn(name);
         this.setState({
             selected:arr
         });
@@ -58,7 +60,7 @@ class ChoserBar extends Component {
                 <ul>
                     <li className={"list " + this.state.selected[0]} matr="modules" onClick={this.handleInputChange}>
                         <a href="#" matr="modules">
-                            <span matr="modules" className="icon"><ion-icon matr="modules" name="browsers-outline"></ion-icon></span>
+                            <span matr="modules" className="icon" ><ion-icon matr="modules" name="browsers-outline"></ion-icon></span>
                             <span matr="modules" className="text">Модули</span>
                         </a>
                     </li>

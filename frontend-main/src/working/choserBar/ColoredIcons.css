@@ -1,0 +1,124 @@
+.navigation ul li:nth-child(2).active a .icon {
+    color: #fff;
+    background: #1da8ff;
+}
+
+.navigation ul li:nth-child(2) a .icon::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #1da8ff;
+    filter: blur(8px);
+    opacity: 0;
+    transition: 0.5s;
+}
+
+.navigation ul li:nth-child(2) a .icon::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: -62px;
+    width: 15px;
+    height: 15px;
+    background: #1da8ff;
+    border: 3px solid #282c34;
+    border-radius: 50%;
+}
+
+/*-------------------*/
+
+.navigation ul li:nth-child(3).active a .icon {
+    color: #fff;
+    background: #ff1dd9;
+}
+
+.navigation ul li:nth-child(3) a .icon::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #ff1dd9;
+    filter: blur(8px);
+    opacity: 0;
+    transition: 0.5s;
+}
+
+.navigation ul li:nth-child(3) a .icon::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: -62px;
+    width: 15px;
+    height: 15px;
+    background: #ff1dd9;
+    border: 3px solid #282c34;
+    border-radius: 50%;
+}
+
+/*----------------------*/
+
+.navigation ul li:nth-child(4).active a .icon {
+    color: #fff;
+    background: #ff611d;
+}
+
+.navigation ul li:nth-child(4) a .icon::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #ff611d;
+    filter: blur(8px);
+    opacity: 0;
+    transition: 0.5s;
+}
+
+.navigation ul li:nth-child(4) a .icon::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: -62px;
+    width: 15px;
+    height: 15px;
+    background: #ff611d;
+    border: 3px solid #282c34;
+    border-radius: 50%;
+}
+
+/*----------------------------*/
+.navigation ul li:nth-child(5).active a .icon {
+    color: #fff;
+    background: #f0ff1d;
+}
+
+.navigation ul li:nth-child(5) a .icon::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #f0ff1d;
+    filter: blur(8px);
+    opacity: 0;
+    transition: 0.5s;
+}
+
+.navigation ul li:nth-child(5) a .icon::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: -62px;
+    width: 15px;
+    height: 15px;
+    background: #f0ff1d;
+    border: 3px solid #282c34;
+    border-radius: 50%;
+}

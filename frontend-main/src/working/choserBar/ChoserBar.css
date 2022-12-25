@@ -12,6 +12,9 @@ body {
     align-items: center;
     transition: 0.5s;
     border-radius: 10px;
+
+    top: 100px;
+    z-index: 1000;
 }
 
 .navigation.active {
@@ -149,6 +152,10 @@ body {
     line-height: 60px;
     border: 6px solid transparent;
     transition: 0.5s;
+}
+
+:root{
+    --logo-color: #c61dff;
 }
 
 .navigation ul li.active a .icon {
