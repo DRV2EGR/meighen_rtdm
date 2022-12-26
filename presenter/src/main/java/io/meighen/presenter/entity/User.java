@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.*;
-import io.meighen.presenter.entity.for_Lobenov.Object;
+import io.meighen.presenter.entity.objects.Object;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

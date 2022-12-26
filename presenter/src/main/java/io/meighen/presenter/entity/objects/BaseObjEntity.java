@@ -1,4 +1,4 @@
-package io.meighen.presenter.entity.for_Lobenov;
+package io.meighen.presenter.entity.objects;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

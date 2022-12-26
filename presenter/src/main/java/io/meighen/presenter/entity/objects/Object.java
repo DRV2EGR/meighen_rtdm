@@ -1,4 +1,4 @@
-package io.meighen.presenter.entity.for_Lobenov;
+package io.meighen.presenter.entity.objects;
 
 import java.util.List;
 
