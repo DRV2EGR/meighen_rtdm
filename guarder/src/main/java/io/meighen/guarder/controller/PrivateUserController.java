@@ -8,8 +8,4 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/private")
 public class PrivateUserController {
-    @GetMapping("/check_auth")
-    public ResponseEntity<?> doCheckAuth() {
-        
-    }
 }
