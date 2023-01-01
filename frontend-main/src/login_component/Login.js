@@ -107,7 +107,7 @@ class Login extends Component {
         this.state = {
             _email: '',
             _password: '',
-            remme: false,
+            remme: true,
             logerr:"nnn"
         };
 
@@ -266,7 +266,7 @@ class Login extends Component {
             <div>
 
 
-                <div className="container">
+                <div className="container my-contain">
                     {/*<div className="body d-md-flex align-items-center justify-content-between">*/}
                         {/*<div className="box-1 mt-md-0 mt-5">*/}
                         {/*    <a href="/">*/}
@@ -291,23 +291,29 @@ class Login extends Component {
                                 <h2>Войти</h2>
                                 <form>
                                     <div className="inputBox">
-                                        <input type="email" placeholder="Email" />
+                                        <input type="email"
+                                               placeholder="Email"
+                                               required
+                                               fullWidth
+                                               id="email"
+                                               label="Email адрес"
+                                               name="_email"
+                                               autoComplete="email"
+                                               onChange={this.handleInputChange}
+                                               autoFocus
+                                        />
                                     </div>
 
                                     <div className="inputBox">
-                                        <input type="password" placeholder="Пароль" />
-                                        {/*<TextField*/}
-                                        {/*                        variant="outlined"*/}
-                                        {/*                        margin="normal"*/}
-                                        {/*                        required*/}
-                                        {/*                        fullWidth*/}
-                                        {/*                        name="_password"*/}
-                                        {/*                        label="Пароль"*/}
-                                        {/*                        type="password"*/}
-                                        {/*                        id="password"*/}
-                                        {/*                        onChange={this.handleInputChange}*/}
-                                        {/*                        autoComplete="current-password"*/}
-                                        {/*                    />*/}
+                                        <input type="password"
+                                               placeholder="Пароль"
+                                               required
+                                               name="_password"
+                                               label="Пароль"
+                                               type="password"
+                                               id="password"
+                                               onChange={this.handleInputChange}
+                                        />
                                     </div>
 
                                     <div className="inputBox">

@@ -49,7 +49,7 @@ class AuthElement extends Component {
                 cookies.remove('accessToken');
                 cookies.remove('refreshToken');
                 cookies.remove('username');
-                window.location = '/';
+                // window.location = '/';
             } else {
                 const cookies = new Cookies();
                 cookies.set('accessToken', rstatus.accessToken, {path: '/'});

@@ -284,10 +284,10 @@
 }
 
 .btns {
-    position: absolute;
+    position: inherit;
     /*right: 100px;*/
     left: 0px;
-    bottom: 10px;
+    /*bottom: 10px;*/
     width: 140px;
     height: 140px;
     background: #c61dff;
@@ -315,13 +315,16 @@
 .btns::before {
     content: '';
     position: absolute;
-    top: 15px;
-    left: 30px;
+    /*top: 15px;*/
+    /*left: 30px;*/
     width: 20px;
     height: 20px;
     border-radius: 50%;
     background: #fff;
     opacity: 0.45;
+
+    margin-left: -100px;
+    margin-top: -65px;
 }
 
 .btns.sgnp {
@@ -353,4 +356,11 @@
 
 .btns:hover {
     border-radius: 50%;
+    color: #fff !important;
+    font-weight: bold;
+}
+
+.my-contain {
+    justify-content: center;
+    display: flex;
 }
