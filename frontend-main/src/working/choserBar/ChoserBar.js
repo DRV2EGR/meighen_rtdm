@@ -7,7 +7,7 @@ class ChoserBar extends Component {
         super(props);
         this.state = {
             navStatus: "",
-            selected: ["", "", "", "", ""],
+            selected: ["active", "", "", "", ""],
             code: props.code ? props.code : '999',
             description: props.description ? props.description : 'Unknown error'
         }

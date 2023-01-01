@@ -9,7 +9,15 @@ import MainPage from "./main_page/MainPage";
 import SignUP from "./login_component/SignUP";
 import Login from "./login_component/Login";
 import CompMain from "./working/modules/CompMain";
+import EurekaElement from "./eureka/EurekaElement";
 class App extends Component {
+
+    async componentDidMount() {
+        // client.logger.level('debug');
+        await EurekaElement.initEureka();
+        // EurekaElement.getInstanceGuarder();
+    }
+
     render()
     {
         return (

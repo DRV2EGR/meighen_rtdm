@@ -57,7 +57,7 @@ async function loginUser(credentials) { //credentials as param
 
     try {
         let data = '';
-        return fetch('api/auth/login', {
+        return fetch('guarder/api/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -124,7 +124,7 @@ class Login extends Component {
         let r = cookies.get('refreshToken');
         let b = cookies.get('username');
 
-        return await fetch('/api/user/private/info', {
+        return await fetch('api/user/private/info', { //TODO: GATEWAY URL
             method: 'get',
             headers: new Headers({
                 'Authorization': 'Bearer ' + a,

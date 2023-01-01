@@ -8,6 +8,7 @@ import Countries from "countries-api/lib/data/Countries.json";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Pagination from "react-js-pagination";
 import AuthElement from "../../auth_element/AuthElement";
+import EurekaElement from "../../eureka/EurekaElement";
 
 
 class CompMain extends Component {

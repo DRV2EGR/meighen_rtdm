@@ -17,7 +17,7 @@ class AuthElement extends Component {
         let b = cookies.get('username');
 
         let status = -1;
-        await fetch('/api/private/check_auth', {
+        await fetch('/guarder/api/private/check_auth', {
             method: 'get',
             headers: new Headers({
                 'Authorization': 'Bearer ' + a,
@@ -25,15 +25,13 @@ class AuthElement extends Component {
             }),
         }).then(function(response) {  status = response.status; });
 
-        // console.log("status: ", status );
-
         if (status != 200) {
             let body = {
                 username: b,
                 accessToken: a,
                 refreshToken: r
             };
-            let rstatus = await fetch('/api/auth/refresh', {
+            let rstatus = await fetch('/guarder/api/auth/refresh', {
                 method: 'post',
                 headers: new Headers({
                     'Authorization': 'Bearer ' + a,
@@ -49,7 +47,7 @@ class AuthElement extends Component {
                 cookies.remove('accessToken');
                 cookies.remove('refreshToken');
                 cookies.remove('username');
-                // window.location = '/';
+                window.location = '/';
             } else {
                 const cookies = new Cookies();
                 cookies.set('accessToken', rstatus.accessToken, {path: '/'});
