@@ -21,4 +21,6 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
 
     Page<Module> findAllByNameContaining(String name, Pageable pageable);
     Page<Module> findAllByLastModifier_FirstName(String lastModifier_firstName, Pageable pageable);
+
+    Module findByUuid(String uuid);
 }

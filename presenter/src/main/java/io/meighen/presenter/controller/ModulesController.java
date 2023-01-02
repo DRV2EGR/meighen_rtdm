@@ -43,7 +43,7 @@ public class ModulesController {
             tutorials = pageTuts.getContent();
 
             Map<String, Object> response = new HashMap<>();
-            response.put("modules", tutorials);
+            response.put("objects", tutorials);
             response.put("currentPage", pageTuts.getNumber());
             response.put("totalItems", pageTuts.getTotalElements());
             response.put("totalPages", pageTuts.getTotalPages());
@@ -70,7 +70,7 @@ public class ModulesController {
             tutorials = pageTuts.getContent();
 
             Map<String, Object> response = new HashMap<>();
-            response.put("modules", tutorials);
+            response.put("objects", tutorials);
             response.put("currentPage", pageTuts.getNumber());
             response.put("totalItems", pageTuts.getTotalElements());
             response.put("totalPages", pageTuts.getTotalPages());
@@ -102,7 +102,7 @@ public class ModulesController {
             tutorials = pageTuts.getContent();
 
             Map<String, Object> response = new HashMap<>();
-            response.put("modules", tutorials);
+            response.put("objects", tutorials);
             response.put("currentPage", pageTuts.getNumber());
             response.put("totalItems", pageTuts.getTotalElements());
             response.put("totalPages", pageTuts.getTotalPages());
@@ -134,7 +134,7 @@ public class ModulesController {
             tutorials = pageTuts.getContent();
 
             Map<String, Object> response = new HashMap<>();
-            response.put("modules", tutorials);
+            response.put("objects", tutorials);
             response.put("currentPage", pageTuts.getNumber());
             response.put("totalItems", pageTuts.getTotalElements());
             response.put("totalPages", pageTuts.getTotalPages());
@@ -151,5 +151,10 @@ public class ModulesController {
         if (onOnePage == 0) { throw new ArithmeticException(); }
 
         return ResponseEntity.ok(new CountPagesDto(moduleRepository.count()/onOnePage));
+    }
+
+    @GetMapping("info")
+    public ResponseEntity<?> getModuleInfo(@RequestParam String uuid) {
+        return ResponseEntity.ok(moduleRepository.findByUuid(uuid));
     }
 }

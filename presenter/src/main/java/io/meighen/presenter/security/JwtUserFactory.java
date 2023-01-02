@@ -7,7 +7,6 @@ import java.util.List;
 import io.meighen.presenter.entity.User;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-
 /**
  * The type Jwt user factory.
  */

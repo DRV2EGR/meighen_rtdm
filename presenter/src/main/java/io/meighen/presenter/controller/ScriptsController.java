@@ -44,7 +44,7 @@ public class ScriptsController {
             tutorials = pageTuts.getContent();
 
             Map<String, Object> response = new HashMap<>();
-            response.put("scripts", tutorials);
+            response.put("objects", tutorials);
             response.put("currentPage", pageTuts.getNumber());
             response.put("totalItems", pageTuts.getTotalElements());
             response.put("totalPages", pageTuts.getTotalPages());
@@ -71,7 +71,7 @@ public class ScriptsController {
             tutorials = pageTuts.getContent();
 
             Map<String, Object> response = new HashMap<>();
-            response.put("scripts", tutorials);
+            response.put("objects", tutorials);
             response.put("currentPage", pageTuts.getNumber());
             response.put("totalItems", pageTuts.getTotalElements());
             response.put("totalPages", pageTuts.getTotalPages());
@@ -103,7 +103,7 @@ public class ScriptsController {
             tutorials = pageTuts.getContent();
 
             Map<String, Object> response = new HashMap<>();
-            response.put("scripts", tutorials);
+            response.put("objects", tutorials);
             response.put("currentPage", pageTuts.getNumber());
             response.put("totalItems", pageTuts.getTotalElements());
             response.put("totalPages", pageTuts.getTotalPages());
@@ -135,7 +135,7 @@ public class ScriptsController {
             tutorials = pageTuts.getContent();
 
             Map<String, Object> response = new HashMap<>();
-            response.put("scripts", tutorials);
+            response.put("objects", tutorials);
             response.put("currentPage", pageTuts.getNumber());
             response.put("totalItems", pageTuts.getTotalElements());
             response.put("totalPages", pageTuts.getTotalPages());

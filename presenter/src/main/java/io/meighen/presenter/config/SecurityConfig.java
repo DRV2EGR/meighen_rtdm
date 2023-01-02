@@ -2,6 +2,8 @@ package io.meighen.presenter.config;
 
 
 
+import io.meighen.presenter.security.JwtConfigurer;
+import io.meighen.presenter.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String PRIVATE_REPOSITORYES_ENDPOINT = "/api/private/repos/**";
 
-//    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
     /**
      * Instantiates a new Security config.
@@ -33,9 +35,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * @param jwtTokenProvider the jwt token provider
      */
     @Autowired
-//    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
-//        this.jwtTokenProvider = jwtTokenProvider;
-//    }
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     @Bean
     @Override
@@ -56,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/api/**").hasAnyRole("USER", "ADMIN")
                     .anyRequest().authenticated()
                 .and()
-                .formLogin().disable();
-//                .apply(new JwtConfigurer(jwtTokenProvider));
+                .formLogin().disable()
+                .apply(new JwtConfigurer(jwtTokenProvider));
     }
 }
