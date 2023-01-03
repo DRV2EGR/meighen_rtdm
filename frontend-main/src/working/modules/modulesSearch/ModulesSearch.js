@@ -46,11 +46,12 @@ class ModuleSearch extends Component {
                 let name = yer[i].name;
                 let dateModif = yer[i].dateModification;
                 let modifier = yer[i].lastModifier.lastName + " " + yer[i].lastModifier.firstName[0] + "." + yer[i].lastModifier.secondName[0] + ".";
+                let intOrExt = yer[i].iinternal?"Внутренний":"Внешний";
                 console.log("elem: ", yer[i])
 
                 arr.push(<tr className='$class' onClick={ this.handleSelectObject} id={yer[i].uuid}>
                     <td><a href='#' id={yer[i].uuid}>{name}</a></td>
-                    <td><a href='#' id={yer[i].uuid}>$extn</a></td>
+                    <td><a href='#' id={yer[i].uuid}>{intOrExt}</a></td>
                     <td><a href='#' id={yer[i].uuid}>{dateModif}</a></td>
                     <td><a href='#' id={yer[i].uuid}>{modifier}</a></td>
                 </tr>);
@@ -73,7 +74,7 @@ class ModuleSearch extends Component {
         return (
             <div className={"searcherMain " + this.props.visibleSearch}>
                 <div id="popup1" className="overlay">
-                    <ModuleCreator type={this.props.fsttIn}/>
+                    <ModuleCreator type={this.props.fsttIn} enab={this.props.enableRedactMode} />
                 </div>
 
 

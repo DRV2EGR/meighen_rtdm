@@ -66,7 +66,7 @@ class AuthElement extends Component {
           () => {
               this.checker();
           },
-          910000,
+          700000,
         );
     }
 
@@ -74,39 +74,27 @@ class AuthElement extends Component {
         const cookies = new Cookies();
         let a = cookies.get('accessToken');
         let r = cookies.get('refreshToken');
-        let b = cookies.get('username');
 
-        let status = -1;
-        await fetch('/guarder/api/private/check_auth', {
-            method: 'get',
-            headers: new Headers({
-                'Authorization': 'Bearer ' + a,
-                'Content-Type': 'application/json'
-            }),
-        }).then(function(response) {  status = response.status; });
+        let body = {
+            accessToken: a,
+            refreshToken: r
+        };
 
-        if (status != 200) {
-            let body = {
-                accessToken: a,
-                refreshToken: r
-            };
+        let rs = await this.getReqRefresh(body);
+        console.log("rs:", rs.status);
 
-            let rs = await this.getReqRefresh(body);
-            console.log("rs:", rs.status);
-
-            if (rs.accessToken) {
-                const cookies = new Cookies();
-                cookies.set('accessToken', rs.accessToken, {path: '/'});
-                cookies.set('refreshToken', rs.refreshToken, {path: '/'});
-                cookies.set('username', rs.username, {path: '/'});
-                window.location.reload();
-            } else {
-                const cookies = new Cookies();
-                cookies.remove('accessToken');
-                cookies.remove('refreshToken');
-                cookies.remove('username');
-                window.location = '/';
-            }
+        if (rs.accessToken) {
+            const cookies = new Cookies();
+            cookies.set('accessToken', rs.accessToken, {path: '/'});
+            cookies.set('refreshToken', rs.refreshToken, {path: '/'});
+            cookies.set('username', rs.username, {path: '/'});
+            window.location.reload();
+        } else {
+            const cookies = new Cookies();
+            cookies.remove('accessToken');
+            cookies.remove('refreshToken');
+            cookies.remove('username');
+            window.location = '/';
         }
     }
 

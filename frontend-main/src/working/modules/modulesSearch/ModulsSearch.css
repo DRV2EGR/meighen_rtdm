@@ -214,8 +214,8 @@
 /*============================*/
 .msvg {
     position: absolute;
-    /*top: -4000px;*/
-    /*left: -4000px; */
+    top: -4000px;
+    left: -4000px;
 }
 
 #gooey-button {

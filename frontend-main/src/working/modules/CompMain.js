@@ -43,6 +43,7 @@ class CompMain extends Component {
             redacters: {obj: {
                 name: ""
                 }},
+            this_typr: true,
 
             code: props.code ? props.code : '999',
             description: props.description ? props.description : 'Unknown error'
@@ -56,25 +57,26 @@ class CompMain extends Component {
     }
 
     async handleEnableRedacting(id) {
-        if (!this.state.redacterMode) {
-            await this.setState({redacterMode:true, redacterEnabled:"dnn", redacterTabClass:""});
-        } else {
-            await this.setState({redacterMode:false, redacterEnabled:"", redacterTabClass:"dnn"});
-            return;
-        }
-
         let redacter = {
             uuid: id,
-            type:this.state.currentPos,
-            permissions:"rw",
+            type: this.state.currentPos,
+            permissions: "rw",
             obj: await this.loadInfoByUUID(id)
         };
 
         console.log("REDACTER: ", redacter);
 
         await this.setState({
-            redacters: redacter
+            redacters: redacter,
+            this_typr: redacter.obj.iinternal
         });
+
+        if (!this.state.redacterMode) {
+            await this.setState({redacterMode:true, redacterEnabled:"dnn", redacterTabClass:""});
+        } else {
+            await this.setState({redacterMode:false, redacterEnabled:"", redacterTabClass:"dnn"});
+            return;
+        }
     }
 
     async loadInfoByUUID(uuid) {
@@ -227,7 +229,7 @@ class CompMain extends Component {
                 {this.renderPage()}
 
                 <ModulesRedacter redacterTabClass={this.state.redacterTabClass} close={this.handleEnableRedacting}
-                                 currentRedacterMeta={this.state.redacters}
+                                 currentRedacterMeta={this.state.redacters} readOnly={false} ourTypeI={this.state.this_typr}
                 />
             </div>
         );
