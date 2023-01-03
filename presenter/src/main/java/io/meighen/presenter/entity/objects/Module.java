@@ -9,12 +9,18 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import io.meighen.presenter.entity.User;
 import lombok.Data;
+import org.springframework.lang.Nullable;
 
 @Entity
 @Table(name ="modules")
 @Data
 public class Module extends BaseObjEntity {
     protected String name;
+
+    protected boolean iinternal;
+
+    @OneToOne
+    protected ExtModule extModule;
 
     @OneToMany
     protected List<Object> objects;
@@ -27,5 +33,4 @@ public class Module extends BaseObjEntity {
     protected LocalDateTime dateModification;
     @OneToOne
     protected User lastModifier;
-
 }
