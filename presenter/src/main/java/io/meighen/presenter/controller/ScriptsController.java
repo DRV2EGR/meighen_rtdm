@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNullApi;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,7 +31,9 @@ public class ScriptsController {
     public ResponseEntity<Map<String, Object>> getModulesByPage(
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false, defaultValue = "true") boolean direction
+    ) {
         try {
             List<Script> tutorials = new ArrayList<Script>();
             Pageable paging = PageRequest.of(page, size);
@@ -55,18 +58,19 @@ public class ScriptsController {
         }
     }
 
-    @GetMapping("/byModifier")
+    @GetMapping("/all/byModifier")
     public ResponseEntity<Map<String, Object>> getModulesByLastModifier(
             @RequestParam String fname,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false, defaultValue = "true") boolean direction
     ) {
         try {
             List<Script> tutorials = new ArrayList<Script>();
             Pageable paging = PageRequest.of(page, size);
 
             Page<Script> pageTuts;
-            pageTuts = scriptRepository.findAllByLastModifier_FirstName(fname, paging);
+            pageTuts = scriptRepository.findAllOrderByLastModifier_FirstNameAsc(fname, paging);
 
             tutorials = pageTuts.getContent();
 
@@ -82,11 +86,12 @@ public class ScriptsController {
         }
     }
 
-    @GetMapping("/byDateCreation")
+    @GetMapping("/all/byDateCreation")
     public ResponseEntity<Map<String, Object>> getModulesByDateCreation(
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false, defaultValue = "true") boolean direction
     ) {
         try {
             List<Script> tutorials = new ArrayList<Script>();
@@ -95,9 +100,9 @@ public class ScriptsController {
             Page<Script> pageTuts;
 
             if (name == null)
-                pageTuts = scriptRepository.findAllByOrderByDateCreation(paging);
+                pageTuts = scriptRepository.findAllByOrderByDateCreationAsc(paging);
             else
-                pageTuts = scriptRepository.findAllByNameContainingOrderByDateCreation(name, paging);
+                pageTuts = scriptRepository.findAllByNameContainingOrderByDateCreationAsc(name, paging);
 
 
             tutorials = pageTuts.getContent();
@@ -114,11 +119,12 @@ public class ScriptsController {
         }
     }
 
-    @GetMapping("/byDateModification")
+    @GetMapping("/all/byDateModification")
     public ResponseEntity<Map<String, Object>> getModulesByDateModification(
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false, defaultValue = "true") boolean direction
     ) {
         try {
             List<Script> tutorials = new ArrayList<Script>();
@@ -127,9 +133,9 @@ public class ScriptsController {
             Page<Script> pageTuts;
 
             if (name == null)
-                pageTuts = scriptRepository.findAllByOrderByDateModification(paging);
+                pageTuts = scriptRepository.findAllByOrderByDateModificationAsc(paging);
             else
-                pageTuts = scriptRepository.findAllByNameContainingOrderByDateModification(name, paging);
+                pageTuts = scriptRepository.findAllByNameContainingOrderByDateModificationAsc(name, paging);
 
 
             tutorials = pageTuts.getContent();
@@ -144,5 +150,10 @@ public class ScriptsController {
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<?> getModuleInfo(@RequestParam String uuid) {
+        return ResponseEntity.ok(scriptRepository.findByUuid(uuid));
     }
 }
