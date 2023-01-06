@@ -2,6 +2,7 @@ package io.meighen.presenter.controller;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import io.meighen.presenter.entity.Backup;
 import io.meighen.presenter.entity.dto.CountPagesDto;
@@ -43,7 +44,7 @@ public class ModulesController extends BasicPrivateController {
             @RequestParam(required = false, defaultValue = "true") boolean direction
     ) {
         try {
-            List<Module> tutorials = new ArrayList<Module>();
+            List<ModuleDto> tutorials = new ArrayList<ModuleDto>();
             Pageable paging = PageRequest.of(page, size);
 
             Page<Module> pageTuts;
@@ -52,7 +53,7 @@ public class ModulesController extends BasicPrivateController {
             else
                 pageTuts = moduleRepository.findAllByNameContaining(name, paging);
 
-            tutorials = pageTuts.getContent();
+            tutorials = pageTuts.getContent().stream().map(i -> mapper.modelToDto(i)).collect(Collectors.toList());
             if (!direction) { Collections.reverse(Arrays.asList(tutorials)); }
 
             Map<String, java.lang.Object> response = new HashMap<>();
@@ -75,7 +76,7 @@ public class ModulesController extends BasicPrivateController {
             @RequestParam(required = false, defaultValue = "true") boolean direction
     ) {
         try {
-            List<Module> tutorials = new ArrayList<Module>();
+            List<ModuleDto> tutorials = new ArrayList<ModuleDto>();
             Pageable paging = PageRequest.of(page, size);
 
             Page<Module> pageTuts;
@@ -84,7 +85,7 @@ public class ModulesController extends BasicPrivateController {
             else
                 pageTuts = moduleRepository.findAllByNameContainingOrderByLastModifier_FirstNameAsc(name, paging);
 
-            tutorials = pageTuts.getContent();
+            tutorials = pageTuts.getContent().stream().map(i -> mapper.modelToDto(i)).collect(Collectors.toList());
             if (!direction) { Collections.reverse(Arrays.asList(tutorials)); }
 
             Map<String, java.lang.Object> response = new HashMap<>();
@@ -107,7 +108,7 @@ public class ModulesController extends BasicPrivateController {
             @RequestParam(required = false, defaultValue = "true") boolean direction
     ) {
         try {
-            List<Module> tutorials = new ArrayList<Module>();
+            List<ModuleDto> tutorials = new ArrayList<ModuleDto>();
             Pageable paging = PageRequest.of(page, size);
 
             Page<Module> pageTuts;
@@ -117,8 +118,7 @@ public class ModulesController extends BasicPrivateController {
             else
                 pageTuts = moduleRepository.findAllByNameContainingOrderByDateCreationAsc(name, paging);
 
-
-            tutorials = pageTuts.getContent();
+            tutorials = pageTuts.getContent().stream().map(i -> mapper.modelToDto(i)).collect(Collectors.toList());
             if (!direction) { Collections.reverse(Arrays.asList(tutorials)); }
 
             Map<String, java.lang.Object> response = new HashMap<>();
@@ -141,7 +141,7 @@ public class ModulesController extends BasicPrivateController {
             @RequestParam(required = false, defaultValue = "true") boolean direction
     ) {
         try {
-            List<Module> tutorials = new ArrayList<Module>();
+            List<ModuleDto> tutorials = new ArrayList<ModuleDto>();
             Pageable paging = PageRequest.of(page, size);
 
             Page<Module> pageTuts;
@@ -151,8 +151,7 @@ public class ModulesController extends BasicPrivateController {
             else
                 pageTuts = moduleRepository.findAllByNameContainingOrderByDateModificationAsc(name, paging);
 
-
-            tutorials = pageTuts.getContent();
+            tutorials = pageTuts.getContent().stream().map(i -> mapper.modelToDto(i)).collect(Collectors.toList());
             if (!direction) { Collections.reverse(Arrays.asList(tutorials)); }
 
             Map<String, java.lang.Object> response = new HashMap<>();

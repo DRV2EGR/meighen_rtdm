@@ -17,18 +17,15 @@ public class ModuleDto {
 
     public boolean iinternal;
 
-    @OneToOne
     public ExtModule extModule;
 
-    @OneToMany
     public List<Object> objects;
 
-    @OneToOne
-    public Script firstScript;
+    public ScriptDto firstScript;
     public String body;
 
     public LocalDateTime dateCreation;
     public LocalDateTime dateModification;
-    @OneToOne
-    public User lastModifier;
+
+    public UserDto lastModifier;
 }

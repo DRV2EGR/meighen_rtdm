@@ -15,6 +15,6 @@ public class ScriptDto {
 
     protected LocalDateTime dateCreation;
     protected LocalDateTime dateModification;
-    @OneToOne
-    protected User lastModifier;
+
+    protected UserDto lastModifier;
 }

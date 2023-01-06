@@ -7,8 +7,8 @@ import lombok.Data;
 @Entity
 @Table(name ="variables")
 @Data
-public class Variablle extends BaseObjEntity {
-    protected String name;
-    protected String value;
-    protected String type;
+public class Variable extends BaseObjEntity {
+    public String name;
+    public String value;
+    public String type;
 }
