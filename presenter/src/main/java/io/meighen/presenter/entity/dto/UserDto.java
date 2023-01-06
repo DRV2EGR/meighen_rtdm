@@ -1,4 +1,4 @@
-package io.meighen.presenter.dto;
+package io.meighen.presenter.entity.dto;
 
 
 import io.meighen.presenter.entity.User;

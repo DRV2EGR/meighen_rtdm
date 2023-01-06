@@ -1,14 +1,13 @@
-package io.meighen.presenter.entity.objects;
+package io.meighen.presenter.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import io.meighen.presenter.entity.BaseEntity;
 import lombok.Data;
 
 @Entity
 @Table(name ="variables")
 @Data
-public class Variablle extends BaseEntity {
+public class Variablle extends BaseObjEntity {
     protected String name;
     protected String value;
     protected String type;

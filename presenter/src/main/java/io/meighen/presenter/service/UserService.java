@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-import io.meighen.presenter.dto.UserDto;
+import io.meighen.presenter.entity.dto.UserDto;
 import io.meighen.presenter.entity.User;
 import io.meighen.presenter.exception.NotFoundException;
 import io.meighen.presenter.exception.UserNotFoundExeption;

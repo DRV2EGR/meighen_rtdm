@@ -1,13 +1,15 @@
 package io.meighen.presenter.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
-import io.meighen.presenter.entity.objects.Module;
-import io.meighen.presenter.entity.objects.Script;
-import io.meighen.presenter.repository.ModuleRepository;
+import io.meighen.presenter.entity.Module;
+import io.meighen.presenter.entity.Object;
+import io.meighen.presenter.entity.Script;
+import io.meighen.presenter.entity.dto.ModuleDto;
+import io.meighen.presenter.entity.dto.ScriptDto;
+import io.meighen.presenter.mapper.ObjectMapper;
+import io.meighen.presenter.repository.ObjectRepository;
 import io.meighen.presenter.repository.ScriptRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,20 +17,20 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.NonNullApi;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/scripts")
-public class ScriptsController {
+public class ScriptsController extends BasicPrivateController {
     @Autowired
     ScriptRepository scriptRepository;
+    @Autowired
+    private ObjectRepository objectRepository;
+    @Autowired
+    private ObjectMapper mapper;
 
     @GetMapping("/")
-    public ResponseEntity<Map<String, Object>> getModulesByPage(
+    public ResponseEntity<Map<String, java.lang.Object>> getModulesByPage(
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
@@ -45,8 +47,9 @@ public class ScriptsController {
                 pageTuts = scriptRepository.findAllByNameContaining(name, paging);
 
             tutorials = pageTuts.getContent();
+            if (!direction) { Collections.reverse(Arrays.asList(tutorials)); }
 
-            Map<String, Object> response = new HashMap<>();
+            Map<String, java.lang.Object> response = new HashMap<>();
             response.put("objects", tutorials);
             response.put("currentPage", pageTuts.getNumber());
             response.put("totalItems", pageTuts.getTotalElements());
@@ -59,8 +62,8 @@ public class ScriptsController {
     }
 
     @GetMapping("/all/byModifier")
-    public ResponseEntity<Map<String, Object>> getModulesByLastModifier(
-            @RequestParam String fname,
+    public ResponseEntity<Map<String, java.lang.Object>> getModulesByLastModifier(
+            @RequestParam (required = false) String name,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(required = false, defaultValue = "true") boolean direction
@@ -70,11 +73,15 @@ public class ScriptsController {
             Pageable paging = PageRequest.of(page, size);
 
             Page<Script> pageTuts;
-            pageTuts = scriptRepository.findAllOrderByLastModifier_FirstNameAsc(fname, paging);
+            if (name == null)
+                pageTuts = scriptRepository.findAllOrderByLastModifier_FirstNameAsc(paging);
+            else
+                pageTuts = scriptRepository.findAllByNameContainingOrderByLastModifier_FirstNameAsc(name, paging);
 
             tutorials = pageTuts.getContent();
+            if (!direction) { Collections.reverse(Arrays.asList(tutorials)); }
 
-            Map<String, Object> response = new HashMap<>();
+            Map<String, java.lang.Object> response = new HashMap<>();
             response.put("objects", tutorials);
             response.put("currentPage", pageTuts.getNumber());
             response.put("totalItems", pageTuts.getTotalElements());
@@ -87,7 +94,7 @@ public class ScriptsController {
     }
 
     @GetMapping("/all/byDateCreation")
-    public ResponseEntity<Map<String, Object>> getModulesByDateCreation(
+    public ResponseEntity<Map<String, java.lang.Object>> getModulesByDateCreation(
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
@@ -106,8 +113,9 @@ public class ScriptsController {
 
 
             tutorials = pageTuts.getContent();
+            if (!direction) { Collections.reverse(Arrays.asList(tutorials)); }
 
-            Map<String, Object> response = new HashMap<>();
+            Map<String, java.lang.Object> response = new HashMap<>();
             response.put("objects", tutorials);
             response.put("currentPage", pageTuts.getNumber());
             response.put("totalItems", pageTuts.getTotalElements());
@@ -120,7 +128,7 @@ public class ScriptsController {
     }
 
     @GetMapping("/all/byDateModification")
-    public ResponseEntity<Map<String, Object>> getModulesByDateModification(
+    public ResponseEntity<Map<String, java.lang.Object>> getModulesByDateModification(
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
@@ -139,8 +147,9 @@ public class ScriptsController {
 
 
             tutorials = pageTuts.getContent();
+            if (!direction) { Collections.reverse(Arrays.asList(tutorials)); }
 
-            Map<String, Object> response = new HashMap<>();
+            Map<String, java.lang.Object> response = new HashMap<>();
             response.put("objects", tutorials);
             response.put("currentPage", pageTuts.getNumber());
             response.put("totalItems", pageTuts.getTotalElements());
@@ -155,5 +164,43 @@ public class ScriptsController {
     @GetMapping("/info")
     public ResponseEntity<?> getModuleInfo(@RequestParam String uuid) {
         return ResponseEntity.ok(scriptRepository.findByUuid(uuid));
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<?> createNewScript(
+            @RequestParam String name,
+            @RequestParam(required = false) boolean internal
+    ) {
+        Script script = new Script();
+        script.setName(name);
+        script.setUuid(String.valueOf(UUID.randomUUID()));
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+        script.setDateCreation(localDateTime);
+        script.setDateModification(localDateTime);
+        script.setLastModifier(getAuthentificatedUser());
+        scriptRepository.save(script);
+
+        Object object = new Object();
+        object.setObjId(script.getId());
+        object.setType("SCRIPT");
+        object.setAllowedUsers(List.of(getAuthentificatedUser()));
+        object.setObjUUID(script.getUuid());
+        objectRepository.save(object);
+
+        return ResponseEntity.ok(script);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateScript(
+            @RequestParam String uuid,
+            @RequestBody ScriptDto scriptDto
+    ) {
+        Script script = scriptRepository.findByUuid(uuid);
+        scriptDto.setDateModification(LocalDateTime.now());
+        mapper.updateScriptFromDto(scriptDto, script);
+        scriptRepository.save(script);
+
+        return ResponseEntity.ok("OK");
     }
 }

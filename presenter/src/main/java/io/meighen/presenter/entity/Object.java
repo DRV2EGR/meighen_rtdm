@@ -1,4 +1,4 @@
-package io.meighen.presenter.entity.objects;
+package io.meighen.presenter.entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 public class Object extends BaseEntity {
     protected String type;
     protected Long objId;
+    protected String objUUID;
 
     @ManyToMany
     protected List<User> allowedUsers;

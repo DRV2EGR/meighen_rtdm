@@ -1,12 +1,11 @@
 package io.meighen.presenter.entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import javax.persistence.*;
-import io.meighen.presenter.entity.objects.Object;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
@@ -17,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public class User extends BaseEntity{
     /**
      * The First name.
