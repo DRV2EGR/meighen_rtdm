@@ -10,6 +10,19 @@ class AuthElement extends Component {
         }
     }
 
+    async getReqRefresh(bo) {
+        let rstatus = await fetch('/guarder/api/auth/refresh', {
+            method: 'post',
+            headers: new Headers({
+                'Authorization': 'Bearer ' + bo.accessToken,
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify(bo)
+        }).then(response => response.json());
+
+        return rstatus;
+    }
+
     async componentDidMount() {
         const cookies = new Cookies();
         let a = cookies.get('accessToken');
@@ -27,35 +40,68 @@ class AuthElement extends Component {
 
         if (status != 200) {
             let body = {
-                username: b,
                 accessToken: a,
                 refreshToken: r
             };
-            let rstatus = await fetch('/guarder/api/auth/refresh', {
-                method: 'post',
-                headers: new Headers({
-                    'Authorization': 'Bearer ' + a,
-                    'Content-Type': 'application/json'
-                }),
-                body: JSON.stringify(body)
-            }).then(response => response.json());
 
-            console.log(rstatus);
+            let rs = await this.getReqRefresh(body);
+            console.log("rs:", rs.status);
 
-            if (status != 200) {
+            if (rs.accessToken) {
+                const cookies = new Cookies();
+                cookies.set('accessToken', rs.accessToken, {path: '/'});
+                cookies.set('refreshToken', rs.refreshToken, {path: '/'});
+                cookies.set('username', rs.username, {path: '/'});
+                window.location.reload();
+            } else {
                 const cookies = new Cookies();
                 cookies.remove('accessToken');
                 cookies.remove('refreshToken');
                 cookies.remove('username');
                 window.location = '/';
-            } else {
-                const cookies = new Cookies();
-                cookies.set('accessToken', rstatus.accessToken, {path: '/'});
-                cookies.set('refreshToken', rstatus.refreshToken, {path: '/'});
-                cookies.set('username', rstatus.username, {path: '/'});
             }
         }
+
+        this.timer = setInterval(
+          () => {
+              this.checker();
+          },
+          700000,
+        );
     }
+
+    async checker() {
+        const cookies = new Cookies();
+        let a = cookies.get('accessToken');
+        let r = cookies.get('refreshToken');
+
+        let body = {
+            accessToken: a,
+            refreshToken: r
+        };
+
+        let rs = await this.getReqRefresh(body);
+        console.log("rs:", rs.status);
+
+        if (rs.accessToken) {
+            const cookies = new Cookies();
+            cookies.set('accessToken', rs.accessToken, {path: '/'});
+            cookies.set('refreshToken', rs.refreshToken, {path: '/'});
+            cookies.set('username', rs.username, {path: '/'});
+            window.location.reload();
+        } else {
+            const cookies = new Cookies();
+            cookies.remove('accessToken');
+            cookies.remove('refreshToken');
+            cookies.remove('username');
+            window.location = '/';
+        }
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timer);
+    }
+
 
 
 

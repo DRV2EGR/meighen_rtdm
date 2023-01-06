@@ -1,4 +1,4 @@
-package io.meighen.presenter.entity.objects;
+package io.meighen.presenter.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;

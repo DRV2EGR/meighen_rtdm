@@ -1,8 +1,12 @@
-package io.meighen.presenter.entity.objects;
+package io.meighen.presenter.entity;
+
+import java.time.LocalDateTime;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToOne;
+import io.meighen.presenter.entity.User;
 import lombok.Data;
 
 @MappedSuperclass
@@ -13,4 +17,9 @@ public abstract class BaseObjEntity {
     protected long id;
 
     protected String uuid;
+
+    protected LocalDateTime dateCreation;
+    protected LocalDateTime dateModification;
+    @OneToOne
+    protected User lastModifier;
 }

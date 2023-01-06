@@ -4,7 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-import io.meighen.presenter.dto.UserDto;
+import io.meighen.presenter.entity.dto.RoleDto;
+import io.meighen.presenter.entity.dto.UserDto;
 import io.meighen.presenter.entity.User;
 import io.meighen.presenter.exception.NotFoundException;
 import io.meighen.presenter.exception.UserNotFoundExeption;
@@ -178,7 +179,7 @@ public class UserService {
         userDto.setEmail(user.getEmail());
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
-        userDto.setRole(user.getRole().getName());
+        userDto.setRole(new RoleDto(user.getRole().getName()));
 //        userDto.setSecondName(user.getSecondName());
         userDto.setPhoneNumber(user.getPhoneNumber());
 

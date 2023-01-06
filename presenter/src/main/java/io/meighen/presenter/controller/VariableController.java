@@ -5,15 +5,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import io.meighen.presenter.entity.Backup;
-import io.meighen.presenter.entity.Module;
-import io.meighen.presenter.entity.Object;
-import io.meighen.presenter.entity.Script;
-import io.meighen.presenter.entity.dto.ModuleDto;
-import io.meighen.presenter.entity.dto.ScriptDto;
+import io.meighen.presenter.entity.Variable;
+import io.meighen.presenter.entity.dto.CountPagesDto;
+import io.meighen.presenter.entity.dto.VariableDto;
 import io.meighen.presenter.mapper.ObjectMapper;
 import io.meighen.presenter.repository.BackupRepository;
+import io.meighen.presenter.repository.VariableRepository;
 import io.meighen.presenter.repository.ObjectRepository;
-import io.meighen.presenter.repository.ScriptRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,33 +21,35 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/scripts")
-public class ScriptsController extends BasicPrivateController {
+@RequestMapping("/api/variables")
+public class VariableController extends BasicPrivateController {
     @Autowired
-    ScriptRepository scriptRepository;
-    @Autowired
-    private ObjectRepository objectRepository;
+    ObjectRepository objectRepository;
+
     @Autowired
     private ObjectMapper mapper;
     @Autowired
-    BackupRepository backupRepository;
+    private BackupRepository backupRepository;
+    @Autowired
+    private VariableRepository variableRepository;
+
 
     @GetMapping("/")
-    public ResponseEntity<Map<String, java.lang.Object>> getScriptsByPage(
+    public ResponseEntity<Map<String, Object>> getVariablesByPage(
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(required = false, defaultValue = "true") boolean direction
     ) {
         try {
-            List<ScriptDto> tutorials = new ArrayList<ScriptDto>();
+            List<VariableDto> tutorials = new ArrayList<VariableDto>();
             Pageable paging = PageRequest.of(page, size);
 
-            Page<Script> pageTuts;
+            Page<Variable> pageTuts;
             if (name == null)
-                pageTuts = scriptRepository.findAll(paging);
+                pageTuts = variableRepository.findAll(paging);
             else
-                pageTuts = scriptRepository.findAllByNameContaining(name, paging);
+                pageTuts = variableRepository.findAllByNameContaining(name, paging);
 
             tutorials = pageTuts.getContent().stream().map(i -> mapper.modelToDto(i)).collect(Collectors.toList());
             if (!direction) { Collections.reverse(Arrays.asList(tutorials)); }
@@ -67,21 +67,21 @@ public class ScriptsController extends BasicPrivateController {
     }
 
     @GetMapping("/all/byModifier")
-    public ResponseEntity<Map<String, java.lang.Object>> getScriptsByLastModifier(
+    public ResponseEntity<Map<String, java.lang.Object>> getVariablesByLastModifier(
             @RequestParam (required = false) String name,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(required = false, defaultValue = "true") boolean direction
     ) {
         try {
-            List<ScriptDto> tutorials = new ArrayList<ScriptDto>();
+            List<VariableDto> tutorials = new ArrayList<VariableDto>();
             Pageable paging = PageRequest.of(page, size);
 
-            Page<Script> pageTuts;
+            Page<Variable> pageTuts;
             if (name == null)
-                pageTuts = scriptRepository.findAllOrderByLastModifier_FirstNameAsc(paging);
+                pageTuts = variableRepository.findAllOrderByLastModifier_FirstNameAsc(paging);
             else
-                pageTuts = scriptRepository.findAllByNameContainingOrderByLastModifier_FirstNameAsc(name, paging);
+                pageTuts = variableRepository.findAllByNameContainingOrderByLastModifier_FirstNameAsc(name, paging);
 
             tutorials = pageTuts.getContent().stream().map(i -> mapper.modelToDto(i)).collect(Collectors.toList());
             if (!direction) { Collections.reverse(Arrays.asList(tutorials)); }
@@ -99,22 +99,22 @@ public class ScriptsController extends BasicPrivateController {
     }
 
     @GetMapping("/all/byDateCreation")
-    public ResponseEntity<Map<String, java.lang.Object>> getScriptsByDateCreation(
+    public ResponseEntity<Map<String, java.lang.Object>> getVariablesByDateCreation(
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(required = false, defaultValue = "true") boolean direction
     ) {
         try {
-            List<ScriptDto> tutorials = new ArrayList<ScriptDto>();
+            List<VariableDto> tutorials = new ArrayList<VariableDto>();
             Pageable paging = PageRequest.of(page, size);
 
-            Page<Script> pageTuts;
+            Page<Variable> pageTuts;
 
             if (name == null)
-                pageTuts = scriptRepository.findAllByOrderByDateCreationAsc(paging);
+                pageTuts = variableRepository.findAllByOrderByDateCreationAsc(paging);
             else
-                pageTuts = scriptRepository.findAllByNameContainingOrderByDateCreationAsc(name, paging);
+                pageTuts = variableRepository.findAllByNameContainingOrderByDateCreationAsc(name, paging);
 
             tutorials = pageTuts.getContent().stream().map(i -> mapper.modelToDto(i)).collect(Collectors.toList());
             if (!direction) { Collections.reverse(Arrays.asList(tutorials)); }
@@ -132,22 +132,22 @@ public class ScriptsController extends BasicPrivateController {
     }
 
     @GetMapping("/all/byDateModification")
-    public ResponseEntity<Map<String, java.lang.Object>> getScriptsByDateModification(
+    public ResponseEntity<Map<String, java.lang.Object>> getVariablesByDateModification(
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(required = false, defaultValue = "true") boolean direction
     ) {
         try {
-            List<ScriptDto> tutorials = new ArrayList<ScriptDto>();
+            List<VariableDto> tutorials = new ArrayList<VariableDto>();
             Pageable paging = PageRequest.of(page, size);
 
-            Page<Script> pageTuts;
+            Page<Variable> pageTuts;
 
             if (name == null)
-                pageTuts = scriptRepository.findAllByOrderByDateModificationAsc(paging);
+                pageTuts = variableRepository.findAllByOrderByDateModificationAsc(paging);
             else
-                pageTuts = scriptRepository.findAllByNameContainingOrderByDateModificationAsc(name, paging);
+                pageTuts = variableRepository.findAllByNameContainingOrderByDateModificationAsc(name, paging);
 
             tutorials = pageTuts.getContent().stream().map(i -> mapper.modelToDto(i)).collect(Collectors.toList());
             if (!direction) { Collections.reverse(Arrays.asList(tutorials)); }
@@ -164,66 +164,75 @@ public class ScriptsController extends BasicPrivateController {
         }
     }
 
-    @GetMapping("/script")
-    public ResponseEntity<?> getScriptInfo(@RequestParam String uuid) {
-        return ResponseEntity.ok(scriptRepository.findByUuid(uuid));
+    @GetMapping("/count_pages")
+    public ResponseEntity<?> getPagesCount(@RequestParam Integer onOnePage) {
+        if (onOnePage == 0) { throw new ArithmeticException(); }
+
+        return ResponseEntity.ok(new CountPagesDto(variableRepository.count()/onOnePage));
     }
 
-    @PostMapping("/script")
-    public ResponseEntity<?> createNewScript(
-            @RequestParam String name
+    @GetMapping("/variable")
+    public ResponseEntity<?> getVariableInfo(@RequestParam String uuid) {
+        return ResponseEntity.ok(variableRepository.findByUuid(uuid));
+    }
+
+    @PostMapping("/variable")
+    public ResponseEntity<?> createNewVariable(
+            @RequestParam String name,
+            @RequestParam String type
     ) {
-        Script script = new Script();
-        script.setName(name);
-        script.setUuid(String.valueOf(UUID.randomUUID()));
+        Variable variablle = new Variable();
+        variablle.setName(name);
+        variablle.setUuid(String.valueOf(UUID.randomUUID()));
+        variablle.setType(type);
 
         LocalDateTime localDateTime = LocalDateTime.now();
-        script.setDateCreation(localDateTime);
-        script.setDateModification(localDateTime);
-        script.setLastModifier(getAuthentificatedUser());
-        scriptRepository.save(script);
+        variablle.setDateCreation(localDateTime);
+        variablle.setDateModification(localDateTime);
+        variablle.setLastModifier(getAuthentificatedUser());
+        variableRepository.save(variablle);
 
-        Object object = new Object();
-        object.setObjId(script.getId());
-        object.setType("SCRIPT");
+        io.meighen.presenter.entity.Object object = new io.meighen.presenter.entity.Object();
+        object.setObjId(variablle.getId());
+        object.setType("Variable");
         object.setAllowedUsers(List.of(getAuthentificatedUser()));
-        object.setObjUUID(script.getUuid());
+        object.setObjUUID(variablle.getUuid());
         objectRepository.save(object);
 
-        return ResponseEntity.ok(script);
+        return ResponseEntity.ok(variablle);
     }
 
-    @PutMapping("/script")
-    public ResponseEntity<?> updateScript(
+    @PutMapping("/variable")
+    public ResponseEntity<?> updateVariable(
             @RequestParam String uuid,
-            @RequestBody ScriptDto scriptDto
+            @RequestBody VariableDto variableDto
     ) {
-        Script script = scriptRepository.findByUuid(uuid);
-        scriptDto.setDateModification(LocalDateTime.now());
-        mapper.updateScriptFromDto(scriptDto, script);
-        scriptRepository.save(script);
+        Variable variablle = variableRepository.findByUuid(uuid);
+        variableDto.setDateModification(LocalDateTime.now());
+        mapper.updateVariableFromDto(variableDto, variablle);
+        variableRepository.save(variablle);
 
         return ResponseEntity.ok("OK");
     }
 
-    @DeleteMapping("/script")
-    public ResponseEntity<?> deleteScript(
+    @DeleteMapping("/variable")
+    public ResponseEntity<?> deleteVariable(
             @RequestParam String uuid
     ) {
-        Script script = scriptRepository.findByUuid(uuid);
+        Variable variablle = variableRepository.findByUuid(uuid);
 
         Backup backup = new Backup();
-        backup.setUuid(script.getUuid());
+        backup.setUuid(variablle.getUuid());
 
         LocalDateTime localDateTime = LocalDateTime.now();
         backup.setDateCreation(localDateTime);
         backup.setDateModification(localDateTime);
         backup.setLastModifier(getAuthentificatedUser());
-        backup.setType("MODULE");
-        backup.setBody(script.toString());
+        backup.setType("Variable");
+        backup.setBody(variablle.toString());
 
         backupRepository.save(backup);
-        scriptRepository.delete(script);
+        variableRepository.delete(variablle);
 
         return ResponseEntity.ok("OK");
     }
