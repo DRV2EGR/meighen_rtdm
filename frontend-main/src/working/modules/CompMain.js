@@ -84,7 +84,7 @@ class CompMain extends Component {
         let a = cookies.get('accessToken');
         console.log("UUID is: " + uuid);
 
-        let aty = await fetch('presenter/api/' + "modules" + "/info?uuid="+uuid, {
+        let aty = await fetch('presenter/api/' + this.state.currentPos  + "/" + this.state.currentPos.slice( 0, this.state.currentPos.length-1 ) +"?uuid="+uuid, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ class CompMain extends Component {
                                      mpgs={this.state.maxPages} visibleSearch={this.state.redacterEnabled}
                                      enableRedactMode={this.handleEnableRedacting}
                 />;
-            case "vars":
+            case "variables":
                 return <ModuleSearch statIn='переменные' fsttIn='vars' orderBy={this.state.orderer}
                                      compsArray={this.state.objects} updater={this.handlePageChange}
                                      mpgs={this.state.maxPages} visibleSearch={this.state.redacterEnabled}
@@ -153,7 +153,7 @@ class CompMain extends Component {
         const cookies = new Cookies();
         let a = cookies.get('accessToken');
 
-        let aty = await fetch('presenter/api/' + "modules" + "/", {
+        let aty = await fetch('presenter/api/' + this.state.currentPos + "/", {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

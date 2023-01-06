@@ -46,7 +46,7 @@ class ChoserBar extends Component {
         const myAttrs = {
             "modules": 0,
             "scripts": 1,
-            "vars": 2,
+            "variables": 2,
             "management": 3,
             "statistics": 4
         };
@@ -81,10 +81,10 @@ class ChoserBar extends Component {
                             <span matr="scripts" className="text">Процессы</span>
                         </a>
                     </li>
-                    <li className={"list " + this.state.selected[2]} matr="vars" onClick={this.handleInputChange}>
+                    <li className={"list " + this.state.selected[2]} matr="variables" onClick={this.handleInputChange}>
                         <a href="#" >
-                            <span matr="vars" className="icon"><ion-icon matr="vars" name="text-outline"></ion-icon></span>
-                            <span matr="vars" className="text">Переменные</span>
+                            <span matr="variables" className="icon"><ion-icon matr="variables" name="text-outline"></ion-icon></span>
+                            <span matr="variables" className="text">Переменные</span>
                         </a>
                     </li>
                     <li className={"list " + this.state.selected[3]} matr="management" onClick={this.handleInputChange}>

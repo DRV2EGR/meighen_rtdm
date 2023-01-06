@@ -25,7 +25,7 @@ class ModuleCreator extends Component {
     const cookies = new Cookies();
     let a = cookies.get('accessToken');
 
-    let aty = await fetch('presenter/api/' + this.props.type + "/create?name="+this.state.compName, {
+    let aty = await fetch('presenter/api/' + this.props.type + "/" + this.props.type.slice( 0, this.props.type.length-1 ) + "?name="+this.state.compName, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
