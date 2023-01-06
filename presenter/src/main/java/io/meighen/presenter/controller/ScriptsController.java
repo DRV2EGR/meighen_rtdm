@@ -30,7 +30,7 @@ public class ScriptsController extends BasicPrivateController {
     private ObjectMapper mapper;
 
     @GetMapping("/")
-    public ResponseEntity<Map<String, java.lang.Object>> getModulesByPage(
+    public ResponseEntity<Map<String, java.lang.Object>> getScriptsByPage(
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
@@ -62,7 +62,7 @@ public class ScriptsController extends BasicPrivateController {
     }
 
     @GetMapping("/all/byModifier")
-    public ResponseEntity<Map<String, java.lang.Object>> getModulesByLastModifier(
+    public ResponseEntity<Map<String, java.lang.Object>> getScriptsByLastModifier(
             @RequestParam (required = false) String name,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
@@ -94,7 +94,7 @@ public class ScriptsController extends BasicPrivateController {
     }
 
     @GetMapping("/all/byDateCreation")
-    public ResponseEntity<Map<String, java.lang.Object>> getModulesByDateCreation(
+    public ResponseEntity<Map<String, java.lang.Object>> getScriptsByDateCreation(
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
@@ -128,7 +128,7 @@ public class ScriptsController extends BasicPrivateController {
     }
 
     @GetMapping("/all/byDateModification")
-    public ResponseEntity<Map<String, java.lang.Object>> getModulesByDateModification(
+    public ResponseEntity<Map<String, java.lang.Object>> getScriptsByDateModification(
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
@@ -162,7 +162,7 @@ public class ScriptsController extends BasicPrivateController {
     }
 
     @GetMapping("/info")
-    public ResponseEntity<?> getModuleInfo(@RequestParam String uuid) {
+    public ResponseEntity<?> getScriptInfo(@RequestParam String uuid) {
         return ResponseEntity.ok(scriptRepository.findByUuid(uuid));
     }
 
