@@ -3,11 +3,13 @@ package io.meighen.presenter.controller;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import io.meighen.presenter.entity.Backup;
 import io.meighen.presenter.entity.dto.CountPagesDto;
 import io.meighen.presenter.entity.Module;
 import io.meighen.presenter.entity.Object;
 import io.meighen.presenter.entity.dto.ModuleDto;
 import io.meighen.presenter.mapper.ObjectMapper;
+import io.meighen.presenter.repository.BackupRepository;
 import io.meighen.presenter.repository.ModuleRepository;
 import io.meighen.presenter.repository.ObjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,8 @@ public class ModulesController extends BasicPrivateController {
 
     @Autowired
     private ObjectMapper mapper;
+    @Autowired
+    private BackupRepository backupRepository;
 
 
     @GetMapping("/")
@@ -170,12 +174,12 @@ public class ModulesController extends BasicPrivateController {
         return ResponseEntity.ok(new CountPagesDto(moduleRepository.count()/onOnePage));
     }
 
-    @GetMapping("/info")
+    @GetMapping("/module")
     public ResponseEntity<?> getModuleInfo(@RequestParam String uuid) {
         return ResponseEntity.ok(moduleRepository.findByUuid(uuid));
     }
 
-    @PostMapping("/create")
+    @PostMapping("/module")
     public ResponseEntity<?> createNewModule(
             @RequestParam String name,
             @RequestParam(required = false) boolean internal
@@ -201,7 +205,7 @@ public class ModulesController extends BasicPrivateController {
         return ResponseEntity.ok(module);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/module")
     public ResponseEntity<?> updateModule(
             @RequestParam String uuid,
             @RequestBody ModuleDto moduleDto
@@ -210,6 +214,28 @@ public class ModulesController extends BasicPrivateController {
         moduleDto.setDateModification(LocalDateTime.now());
         mapper.updateModuleFromDto(moduleDto, module);
         moduleRepository.save(module);
+
+        return ResponseEntity.ok("OK");
+    }
+
+    @DeleteMapping("/module")
+    public ResponseEntity<?> deleteModule(
+            @RequestParam String uuid
+    ) {
+        Module module = moduleRepository.findByUuid(uuid);
+
+        Backup backup = new Backup();
+        backup.setUuid(module.getUuid());
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+        backup.setDateCreation(localDateTime);
+        backup.setDateModification(localDateTime);
+        backup.setLastModifier(getAuthentificatedUser());
+        backup.setType("MODULE");
+        backup.setBody(module.toString());
+
+        backupRepository.save(backup);
+        moduleRepository.delete(module);
 
         return ResponseEntity.ok("OK");
     }

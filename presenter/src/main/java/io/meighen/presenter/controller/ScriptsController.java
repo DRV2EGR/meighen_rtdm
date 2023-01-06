@@ -3,12 +3,14 @@ package io.meighen.presenter.controller;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import io.meighen.presenter.entity.Backup;
 import io.meighen.presenter.entity.Module;
 import io.meighen.presenter.entity.Object;
 import io.meighen.presenter.entity.Script;
 import io.meighen.presenter.entity.dto.ModuleDto;
 import io.meighen.presenter.entity.dto.ScriptDto;
 import io.meighen.presenter.mapper.ObjectMapper;
+import io.meighen.presenter.repository.BackupRepository;
 import io.meighen.presenter.repository.ObjectRepository;
 import io.meighen.presenter.repository.ScriptRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class ScriptsController extends BasicPrivateController {
     private ObjectRepository objectRepository;
     @Autowired
     private ObjectMapper mapper;
+    @Autowired
+    BackupRepository backupRepository;
 
     @GetMapping("/")
     public ResponseEntity<Map<String, java.lang.Object>> getScriptsByPage(
@@ -161,12 +165,12 @@ public class ScriptsController extends BasicPrivateController {
         }
     }
 
-    @GetMapping("/info")
+    @GetMapping("/script")
     public ResponseEntity<?> getScriptInfo(@RequestParam String uuid) {
         return ResponseEntity.ok(scriptRepository.findByUuid(uuid));
     }
 
-    @PostMapping("/create")
+    @PostMapping("/script")
     public ResponseEntity<?> createNewScript(
             @RequestParam String name,
             @RequestParam(required = false) boolean internal
@@ -191,7 +195,7 @@ public class ScriptsController extends BasicPrivateController {
         return ResponseEntity.ok(script);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/script")
     public ResponseEntity<?> updateScript(
             @RequestParam String uuid,
             @RequestBody ScriptDto scriptDto
@@ -200,6 +204,28 @@ public class ScriptsController extends BasicPrivateController {
         scriptDto.setDateModification(LocalDateTime.now());
         mapper.updateScriptFromDto(scriptDto, script);
         scriptRepository.save(script);
+
+        return ResponseEntity.ok("OK");
+    }
+
+    @DeleteMapping("/script")
+    public ResponseEntity<?> deleteScript(
+            @RequestParam String uuid
+    ) {
+        Script script = scriptRepository.findByUuid(uuid);
+
+        Backup backup = new Backup();
+        backup.setUuid(script.getUuid());
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+        backup.setDateCreation(localDateTime);
+        backup.setDateModification(localDateTime);
+        backup.setLastModifier(getAuthentificatedUser());
+        backup.setType("MODULE");
+        backup.setBody(script.toString());
+
+        backupRepository.save(backup);
+        scriptRepository.delete(script);
 
         return ResponseEntity.ok("OK");
     }
