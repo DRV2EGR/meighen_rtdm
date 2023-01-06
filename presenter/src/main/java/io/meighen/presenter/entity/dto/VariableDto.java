@@ -8,6 +8,7 @@ import lombok.Data;
 
 @Data
 public class VariableDto {
+    public String uuid;
     public String name;
     public String value;
     public String type;

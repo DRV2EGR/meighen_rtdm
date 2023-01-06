@@ -13,7 +13,8 @@ import lombok.Data;
 
 @Data
 public class ModuleDto {
-    protected String name;
+    public String uuid;
+    public String name;
 
     public boolean iinternal;
 

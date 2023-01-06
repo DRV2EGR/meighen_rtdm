@@ -8,6 +8,7 @@ import lombok.Data;
 
 @Data
 public class ScriptDto {
+    public String uuid;
     protected String name;
     protected String mainMethod;
     protected String topicName;
