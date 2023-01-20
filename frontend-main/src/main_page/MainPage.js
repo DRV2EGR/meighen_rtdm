@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './main_page.css';
 import Header from "../header/Header";
 import ChoserBar from "../working/choserBar/ChoserBar";
+import Cookies from "universal-cookie/es6";
 
 
 class MainPage extends Component {
@@ -13,6 +14,16 @@ class MainPage extends Component {
         }
     }
 
+    componentDidMount() {
+        const cookies = new Cookies();
+        let a = cookies.get('accessToken');
+
+        if (a) {
+            // Authorized!
+            // Go to cabinett
+            window.location = '/main';
+        }
+    }
 
     render() {
         const {code, description} = this.state;

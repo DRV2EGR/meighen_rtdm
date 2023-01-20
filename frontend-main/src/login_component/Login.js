@@ -57,7 +57,7 @@ async function loginUser(credentials) { //credentials as param
 
     try {
         let data = '';
-        return fetch('api/auth/login', {
+        return fetch('guarder/api/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -107,7 +107,7 @@ class Login extends Component {
         this.state = {
             _email: '',
             _password: '',
-            remme: false,
+            remme: true,
             logerr:"nnn"
         };
 
@@ -124,7 +124,7 @@ class Login extends Component {
         let r = cookies.get('refreshToken');
         let b = cookies.get('username');
 
-        return await fetch('/api/user/private/info', {
+        return await fetch('api/user/private/info', { //TODO: GATEWAY URL
             method: 'get',
             headers: new Headers({
                 'Authorization': 'Bearer ' + a,
@@ -238,6 +238,8 @@ class Login extends Component {
             let usr = await this.getUserInfo();
             cookies.set('fname', usr.firstName, {path: '/'});
             cookies.set('lname', usr.secondName, {path: '/'});
+
+            cookies.set('timerTime', Date.now(), {path: '/'});
             console.log(usr);
             //history.push('/');
             // this.context.router.history.push('/');
@@ -266,7 +268,7 @@ class Login extends Component {
             <div>
 
 
-                <div className="container">
+                <div className="container my-contain">
                     {/*<div className="body d-md-flex align-items-center justify-content-between">*/}
                         {/*<div className="box-1 mt-md-0 mt-5">*/}
                         {/*    <a href="/">*/}
@@ -291,23 +293,29 @@ class Login extends Component {
                                 <h2>Войти</h2>
                                 <form>
                                     <div className="inputBox">
-                                        <input type="email" placeholder="Email" />
+                                        <input type="email"
+                                               placeholder="Email"
+                                               required
+                                               fullWidth
+                                               id="email"
+                                               label="Email адрес"
+                                               name="_email"
+                                               autoComplete="email"
+                                               onChange={this.handleInputChange}
+                                               autoFocus
+                                        />
                                     </div>
 
                                     <div className="inputBox">
-                                        <input type="password" placeholder="Пароль" />
-                                        {/*<TextField*/}
-                                        {/*                        variant="outlined"*/}
-                                        {/*                        margin="normal"*/}
-                                        {/*                        required*/}
-                                        {/*                        fullWidth*/}
-                                        {/*                        name="_password"*/}
-                                        {/*                        label="Пароль"*/}
-                                        {/*                        type="password"*/}
-                                        {/*                        id="password"*/}
-                                        {/*                        onChange={this.handleInputChange}*/}
-                                        {/*                        autoComplete="current-password"*/}
-                                        {/*                    />*/}
+                                        <input type="password"
+                                               placeholder="Пароль"
+                                               required
+                                               name="_password"
+                                               label="Пароль"
+                                               type="password"
+                                               id="password"
+                                               onChange={this.handleInputChange}
+                                        />
                                     </div>
 
                                     <div className="inputBox">

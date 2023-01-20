@@ -1,7 +1,6 @@
 package io.meighen.presenter.security;
 
 
-
 import io.meighen.presenter.entity.User;
 import io.meighen.presenter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

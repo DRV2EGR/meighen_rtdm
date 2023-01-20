@@ -52,7 +52,7 @@ function registerSellerUser(credentials) { //credentials as param
     //console.log(JSON.stringify(credentials));
 
     let data = '';
-    return fetch( '/api/signup/', {
+    return fetch( 'guarder/api/signup/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

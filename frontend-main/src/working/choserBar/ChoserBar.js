@@ -1,13 +1,21 @@
 import React, {Component} from 'react';
 import './ChoserBar.css';
 import './ColoredIcons.css';
+import { Cookies } from "react-cookie";
 
 class ChoserBar extends Component {
+    sortState = {
+        0: "/",
+        1: "/byModifier",
+        2: "/byDateCreation",
+        3: "/byDateModification"
+    };
+
     constructor(props) {
         super(props);
         this.state = {
             navStatus: "",
-            selected: ["", "", "", "", ""],
+            selected: ["active", "", "", "", ""],
             code: props.code ? props.code : '999',
             description: props.description ? props.description : 'Unknown error'
         }
@@ -29,16 +37,16 @@ class ChoserBar extends Component {
 
     }
 
-    handleInputChange(event) {
+    async handleInputChange(event) {
         const target = event.target;
         const name = target.getAttribute('matr');
 
         console.log(name);
 
         const myAttrs = {
-            "modules" : 0,
-            "processes" : 1,
-            "vars" : 2,
+            "modules": 0,
+            "scripts": 1,
+            "variables": 2,
             "management": 3,
             "statistics": 4
         };
@@ -46,9 +54,12 @@ class ChoserBar extends Component {
         let arr = ["", "", "", "", ""];
         arr[myAttrs[name]] = "active";
 
+        // console.log(name);
+        this.props.objSetter(await this.props.requester(name));
+
         this.props.stateIn(name);
         this.setState({
-            selected:arr
+            selected: arr
         });
     }
 
@@ -64,16 +75,16 @@ class ChoserBar extends Component {
                             <span matr="modules" className="text">Модули</span>
                         </a>
                     </li>
-                    <li className={"list " + this.state.selected[1]} matr="processes" onClick={this.handleInputChange}>
+                    <li className={"list " + this.state.selected[1]} matr="scripts" onClick={this.handleInputChange}>
                         <a href="#" >
-                            <span matr="processes" className="icon"><ion-icon matr="processes" name="code-slash-outline"></ion-icon></span>
-                            <span matr="processes" className="text">Процессы</span>
+                            <span matr="scripts" className="icon"><ion-icon matr="scripts" name="code-slash-outline"></ion-icon></span>
+                            <span matr="scripts" className="text">Процессы</span>
                         </a>
                     </li>
-                    <li className={"list " + this.state.selected[2]} matr="vars" onClick={this.handleInputChange}>
+                    <li className={"list " + this.state.selected[2]} matr="variables" onClick={this.handleInputChange}>
                         <a href="#" >
-                            <span matr="vars" className="icon"><ion-icon matr="vars" name="text-outline"></ion-icon></span>
-                            <span matr="vars" className="text">Переменные</span>
+                            <span matr="variables" className="icon"><ion-icon matr="variables" name="text-outline"></ion-icon></span>
+                            <span matr="variables" className="text">Переменные</span>
                         </a>
                     </li>
                     <li className={"list " + this.state.selected[3]} matr="management" onClick={this.handleInputChange}>

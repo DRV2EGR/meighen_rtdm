@@ -22,11 +22,11 @@ th {
     background-color: #c61dff;
 }
 
-.processes {
+.scripts {
     background-color: #1da8ff;
 }
 
-.vars {
+.variables {
     background-color: #ff1dd9;
 }
 
@@ -153,4 +153,20 @@ table tr td:first-of-type a[href$=".js"] {
 /* directories */
 table tr.dir td:first-of-type a {
     background-image: url(./.images/folder.png);
+}
+
+table tr td:first-of-type a[href$="modules"] {
+    background-image: url(./.images/xml.png);
+}
+
+table tr td:first-of-type a[href$="modules_ext"] {
+    background-image: url(./.images/file.png);
+}
+
+table tr td:first-of-type a[href$="scripts"] {
+    background-image: url(./.images/script.png);
+}
+
+table tr td:first-of-type a[href$="variables"] {
+    background-image: url(./.images/css.png);
 }

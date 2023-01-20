@@ -110,6 +110,11 @@ body {
     transform: scale(1);
 }
 
+.navigation.active ul li::before {
+    content: '';
+    display: none;
+}
+
 .navigation ul li::after {
     content: '';
     position: absolute;
@@ -123,6 +128,11 @@ body {
     transform: scale(0);
     transform-origin: bottom right;
     transition: 0.5s;
+}
+
+.navigation.active ul li::after {
+    content: '';
+    display: none;
 }
 
 .navigation ul li.active::after {
