@@ -50,7 +50,7 @@ class ModuleSearch extends Component {
                 console.log("elem: ", yer[i])
 
                 arr.push(<tr className='$class' onClick={ this.handleSelectObject} id={yer[i].uuid}>
-                    <td><a href='#' id={yer[i].uuid}>{name}</a></td>
+                    <td><a href={this.props.fsttIn+((yer[i].iinternal==false)?"_ext":"")+""} id={yer[i].uuid}>{name}</a></td>
                     <td><a href='#' id={yer[i].uuid}>{intOrExt}</a></td>
                     <td><a href='#' id={yer[i].uuid}>{dateModif}</a></td>
                     <td><a href='#' id={yer[i].uuid}>{modifier}</a></td>

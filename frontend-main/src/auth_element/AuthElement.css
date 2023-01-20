@@ -1,0 +1,11 @@
+.ticker {
+    position: absolute;
+    background-color: rgba(1, 255, 247, 0.65);
+    border-radius: 50%;
+
+    min-width: 30px;
+    text-align: center;
+
+    bottom: 0;
+    left: 50%;
+}

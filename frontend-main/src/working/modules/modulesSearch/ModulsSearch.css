@@ -401,3 +401,16 @@
     100% {
         transform: translate(0, 0);
         opacity: 0; } }
+
+.diver {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+}

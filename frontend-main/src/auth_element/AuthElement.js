@@ -1,12 +1,14 @@
 
 import React, {Component} from 'react';
 import {Cookies} from "react-cookie";
+import './AuthElement.css';
 
 class AuthElement extends Component {
     constructor() {
         super();
         this.state = {
-            sfsf: ""
+            sfsf: "",
+            ticks: 0
         }
     }
 
@@ -52,6 +54,8 @@ class AuthElement extends Component {
                 cookies.set('accessToken', rs.accessToken, {path: '/'});
                 cookies.set('refreshToken', rs.refreshToken, {path: '/'});
                 cookies.set('username', rs.username, {path: '/'});
+
+                cookies.set('timerTime', Date.now(), {path: '/'});
                 window.location.reload();
             } else {
                 const cookies = new Cookies();
@@ -62,11 +66,19 @@ class AuthElement extends Component {
             }
         }
 
+        let tk = Number(cookies.get('timerTicker'))?Number(cookies.get('timerTicker')):0;
+        this.setState({ticks : tk});
         this.timer = setInterval(
           () => {
-              this.checker();
+              let diff = Date.now() - Number(cookies.get('timerTime'));
+              if (diff > 700000) {
+                  this.checker();
+                  this.setState({ticks : 0});
+              } else {
+                  this.setState({ticks : Math.floor(diff/1000)});
+              }
           },
-          700000,
+          1000,
         );
     }
 
@@ -88,7 +100,8 @@ class AuthElement extends Component {
             cookies.set('accessToken', rs.accessToken, {path: '/'});
             cookies.set('refreshToken', rs.refreshToken, {path: '/'});
             cookies.set('username', rs.username, {path: '/'});
-            window.location.reload();
+
+            cookies.set('timerTime', Date.now(), {path: '/'});
         } else {
             const cookies = new Cookies();
             cookies.remove('accessToken');
@@ -102,12 +115,9 @@ class AuthElement extends Component {
         clearInterval(this.timer);
     }
 
-
-
-
     render() {
         return (
-            <div></div>
+            <div className="ticker">{700-this.state.ticks}</div>
         );
     }
 }

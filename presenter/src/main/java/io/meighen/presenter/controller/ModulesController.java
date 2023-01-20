@@ -209,6 +209,7 @@ public class ModulesController extends BasicPrivateController {
             @RequestParam String uuid,
             @RequestBody ModuleDto moduleDto
     ) {
+        moduleDto.setIinternal(!moduleDto.iinternal);
         Module module = moduleRepository.findByUuid(uuid);
         moduleDto.setDateModification(LocalDateTime.now());
         mapper.updateModuleFromDto(moduleDto, module);

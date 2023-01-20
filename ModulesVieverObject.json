@@ -1,0 +1,43 @@
+{
+    "objects" : [
+        {
+            "uuid": "uuid-uuid-uuid-uuid-uuid",
+            "type": "script",
+            "x-pos": "24.47",
+            "y-pos": "30.52",
+            "elem_uuid": "uuid-uuid-uuid-uuid-uuid",
+            "name": "Preparate for CRE",
+            "connections": [
+                {
+                    "type":"arrow",
+                    "to": "uuid-uuid-uuid-uuid-uuid"
+                }
+            ]
+        },
+        {
+            "uuid": "uuid-uuid-uuid-uuid-uuid",
+            "type": "choice",
+            "x-pos": "47.25",
+            "y-pos": "73.94",
+            "elem_uuid": "uuid-uuid-uuid-uuid-uuid",
+            "name": "Need go CRE",
+            "connections": [
+                {
+                    "type":"arrow",
+                    "to": "uuid-uuid-uuid-uuid-uuid",
+                    "when":"a > b"
+                },
+                {
+                    "type":"arrow",
+                    "to": "uuid-uuid-uuid-uuid-uuid",
+                    "when":"a > b"
+                },
+                {
+                    "type":"arrow",
+                    "to": "uuid-uuid-uuid-uuid-uuid",
+                    "when":"a > b"
+                }
+            ]
+        },
+    ]
+}

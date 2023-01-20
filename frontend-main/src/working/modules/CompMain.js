@@ -75,6 +75,7 @@ class CompMain extends Component {
             await this.setState({redacterMode:true, redacterEnabled:"dnn", redacterTabClass:""});
         } else {
             await this.setState({redacterMode:false, redacterEnabled:"", redacterTabClass:"dnn"});
+            await this.refrPage();
             return;
         }
     }
@@ -116,7 +117,7 @@ class CompMain extends Component {
                                      enableRedactMode={this.handleEnableRedacting}
                 />;
             case "variables":
-                return <ModuleSearch statIn='переменные' fsttIn='vars' orderBy={this.state.orderer}
+                return <ModuleSearch statIn='переменные' fsttIn='variables' orderBy={this.state.orderer}
                                      compsArray={this.state.objects} updater={this.handlePageChange}
                                      mpgs={this.state.maxPages} visibleSearch={this.state.redacterEnabled}
                                      enableRedactMode={this.handleEnableRedacting}
@@ -149,7 +150,7 @@ class CompMain extends Component {
         }
     }
 
-    async componentDidMount() {
+    async refrPage() {
         const cookies = new Cookies();
         let a = cookies.get('accessToken');
 
@@ -169,9 +170,11 @@ class CompMain extends Component {
 
         try {
             this.setState({ objects: aty.objects });
-        } catch (e) {
-            
-        }
+        } catch (e) {}
+    }
+
+    async componentDidMount() {
+        await this.refrPage();
     }
 
     async getParamStr(params) {

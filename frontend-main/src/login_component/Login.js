@@ -238,6 +238,8 @@ class Login extends Component {
             let usr = await this.getUserInfo();
             cookies.set('fname', usr.firstName, {path: '/'});
             cookies.set('lname', usr.secondName, {path: '/'});
+
+            cookies.set('timerTime', Date.now(), {path: '/'});
             console.log(usr);
             //history.push('/');
             // this.context.router.history.push('/');

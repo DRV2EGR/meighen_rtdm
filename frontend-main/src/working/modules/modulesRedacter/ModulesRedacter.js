@@ -3,77 +3,10 @@ import './ModulesRedacter.css';
 import { Cookies } from "react-cookie";
 
 class ModulesRedacter extends Component {
-
-  // redacterElems = {
-  //   modules: {
-  //     pages: 4,
-  //     tpages: [
-  //       [
-  //         {
-  //           name: "Название",
-  //           type: "text",
-  //           value: this.props.currentRedacterMeta.obj?.name,
-  //           presented: true
-  //         },
-  //         {
-  //           name: "Внешний модуль",
-  //           type: "switch",
-  //           value: !this.props.currentRedacterMeta.obj.iinternal,
-  //           presented: true
-  //         },
-  //         {
-  //           name: "Начинающий скрипт",
-  //           type: "text",
-  //           value: this.props.currentRedacterMeta.obj?.firstScript,
-  //           presented: this.props.currentRedacterMeta.obj.iinternal
-  //         },
-  //         {
-  //           name: "Внешний адрес",
-  //           type: "text",
-  //           value: this.props.currentRedacterMeta.obj?.extModule?.callUrl,
-  //           presented: !(this.props.currentRedacterMeta.obj.iinternal)
-  //         },
-  //         {
-  //           name: "Тип вызова",
-  //           type: "chose",
-  //           decisons: [
-  //             "REST",
-  //             "SOAP",
-  //             "RPC"
-  //           ],
-  //           value: this.props.currentRedacterMeta.obj?.extModule?.callType,
-  //           presented: !(this.props.currentRedacterMeta.obj.iinternal)
-  //         }
-  //       ],
-  //
-  //       [
-  //         {
-  //           type: "modulesRenderer",
-  //           presented: !(this.props.currentRedacterMeta.obj.iinternal)
-  //         }
-  //       ],
-  //
-  //       [
-  //         {
-  //           name: "Входящие значения",
-  //           type: "inVars"
-  //         }
-  //       ],
-  //
-  //       [
-  //         {
-  //           name: "Исходящие значения",
-  //           type: "outVars"
-  //         }
-  //       ]
-  //     ]
-  //   }
-  // };
-
   myAttrs = {
     "modules": "Модуль ",
     "scripts": "Скрипт ",
-    "vars": "Переменная "
+    "variables": "Переменная "
   };
 
   constructor(props) {
@@ -81,6 +14,8 @@ class ModulesRedacter extends Component {
     this.state = {
       pcur: 0,
       vals: [],
+      changesLog: [],
+      handledChanges: false,
       code: props.code ? props.code : '999',
       description: props.description ? props.description : 'Unknown error'
     }
@@ -90,10 +25,119 @@ class ModulesRedacter extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleInputChangeCheker = this.handleInputChangeCheker.bind(this);
     this.renderPagesState = this.renderPagesState.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  callSaveComp(contents) {
+    const cookies = new Cookies();
+    let a = cookies.get('accessToken');
+
+    fetch('presenter/api/' + this.props.currentRedacterMeta.type + "/" + this.props.currentRedacterMeta.type.slice(0, this.props.currentRedacterMeta.type.length - 1) + "?uuid=" + this.props.currentRedacterMeta.obj?.uuid, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + a,
+      },
+      body: JSON.stringify(contents)
+    }).then(response => {
+      if (!response.ok) {
+        //throw new Error('Network response was not OK');
+        return response;
+      }
+      return response.json();
+    });
+  }
+  handleSubmit(e) {
+    e.preventDefault();
+
+    let body = {};
+    for (let i = 0; i < this.state.changesLog.length; i++) {
+      if (this.state.changesLog[i]) {
+        // add to json
+        body[this.state.changesLog[i]] = this.state.vals[i];
+      }
+    }
+
+    this.callSaveComp(body);
+    this.setState({handledChanges: false});
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     this.redacterElems = {
+      scripts: {
+        pages: 4,
+        tpages: [
+          [
+            {
+              name: "Название",
+              type: "text",
+              value: this.props.currentRedacterMeta.obj?.name,
+              presented: true,
+              arr: 0,
+              commitName: "name"
+            }
+          ],
+          [
+            {
+              name: "Содержание",
+              type: "text",
+              value: this.props.currentRedacterMeta.obj?.body,
+              presented: true,
+              arr: 1,
+              commitName: "body"
+            }
+          ],
+          [
+            {
+              name: "Входящие значения",
+              type: "inVars",
+              arr: 2
+            }
+          ],
+          [
+            {
+              name: "Исходящие значения",
+              type: "outVars",
+              arr: 3
+            }
+          ]
+        ]
+      },
+      variables: {
+        pages: 1,
+        tpages: [
+          [
+            {
+              name: "Название",
+              type: "text",
+              value: this.props.currentRedacterMeta.obj?.name,
+              presented: true,
+              arr: 0,
+              commitName: "name"
+            },
+            {
+              name: "Тип",
+              type: "chose",
+              decisons: [
+                "INTEGER",
+                "STRING",
+                "BOOLEAN"
+              ],
+              value: this.props.currentRedacterMeta.obj?.type,
+              arr: 1,
+              commitName: "type"
+            },
+            {
+              name: "Значение",
+              type: "text",
+              value: this.props.currentRedacterMeta.obj?.value,
+              presented: true,
+              arr: 2,
+              commitName: "value"
+            }
+          ]
+        ]
+      },
       modules: {
         pages: 4,
         tpages: [
@@ -102,27 +146,36 @@ class ModulesRedacter extends Component {
               name: "Название",
               type: "text",
               value: this.props.currentRedacterMeta.obj?.name,
-              presented: true
+              presented: true,
+              arr: 0,
+              commitName: "name"
             },
             {
               name: "Внешний модуль",
               type: "switch",
               value: !this.props.currentRedacterMeta.obj.iinternal,
-              presented: true
+              presented: true,
+              arr: 1,
+              commitName: "iinternal"
             },
+
             {
               name: "Начинающий скрипт",
               type: "text",
               value: this.props.currentRedacterMeta.obj?.firstScript,
               presented: this.props.currentRedacterMeta.obj.iinternal,
-              notdepends: 1
+              notdepends: 1,
+              arr: 2,
+              commitName: "firstScript"
             },
             {
               name: "Внешний адрес",
               type: "text",
               value: this.props.currentRedacterMeta.obj?.extModule?.callUrl,
               presented: !(this.props.currentRedacterMeta.obj.iinternal),
-              depends: 1
+              depends: 1,
+              arr: 3,
+              commitName: "callUrl"
             },
             {
               name: "Тип вызова",
@@ -134,28 +187,33 @@ class ModulesRedacter extends Component {
               ],
               value: this.props.currentRedacterMeta.obj?.extModule?.callType,
               presented: !(this.props.currentRedacterMeta.obj.iinternal),
-              depends: 1
+              depends: 1,
+              arr: 4,
+              commitName: "callType"
             }
           ],
 
           [
             {
               type: "modulesRenderer",
-              presented: !(this.props.currentRedacterMeta.obj.iinternal)
+              presented: !(this.props.currentRedacterMeta.obj.iinternal),
+              arr: 5
             }
           ],
 
           [
             {
               name: "Входящие значения",
-              type: "inVars"
+              type: "inVars",
+              arr: 6
             }
           ],
 
           [
             {
               name: "Исходящие значения",
-              type: "outVars"
+              type: "outVars",
+              arr: 7
             }
           ]
         ]
@@ -174,8 +232,22 @@ class ModulesRedacter extends Component {
     }
     console.log("rrd= ", rrrd);
     if (prevProps !== this.props) {
-      this.setState({ vals: rrrd });
+      this.setState({
+        vals: rrrd,
+        handledChanges: false,
+        changesLog: []
+      });
     }
+
+    // if (prevProps.currentRedacterMeta.type !== this.props.currentRedacterMeta.type) {
+    //   let gert = [];
+    //   for (let i = 0; i < this.redacterElems[this.props.currentRedacterMeta.type].tpages[this.state.pcur].size; i++) {
+    //     gert.push(null);
+    //   }
+    //   this.setState({
+    //     changesLog : gert
+    //   });
+    // }
 
     // let cnter = [];
     // try {
@@ -207,11 +279,19 @@ class ModulesRedacter extends Component {
     const value = target.value;
     const name = target.name;
 
-    //console.log(name, " ", value)
+    console.log(name, " ", value)
     let vvv = this.state.vals;
+    let vvvChanges = []; //Array.apply(null, Array(this.state.vals.length)).map(function () {}); //[...this.state.vals];
+    for (let i = 0; i < this.state.vals.length; i++) {
+      if (this.state.changesLog[i]) { vvvChanges.push(this.state.changesLog[i]);}
+      else { vvvChanges.push(undefined); }
+    }
     vvv[name] = value;
+    vvvChanges[name] = this.redacterElems[this.props.currentRedacterMeta.type].tpages[this.state.pcur][name].commitName;
     this.setState({
-      vals:vvv
+      vals:vvv,
+      changesLog: vvvChanges,
+      handledChanges: true
     });
   }
 
@@ -222,9 +302,17 @@ class ModulesRedacter extends Component {
 
     console.log(name, " ", value)
     let vvv = this.state.vals;
+    let vvvChanges = []; //[...this.state.vals];
+    for (let i = 0; i < this.state.vals.length; i++) {
+      if (this.state.changesLog[i]) { vvvChanges.push(this.state.changesLog[i]);}
+      else { vvvChanges.push(undefined); }
+    }
     vvv[name] = value;
+    vvvChanges[name] = this.redacterElems[this.props.currentRedacterMeta.type].tpages[this.state.pcur][name].commitName;
     this.setState({
-      vals:vvv
+      vals:vvv,
+      changesLog: vvvChanges,
+      handledChanges: true
     });
 
     target.checked = !value;
@@ -260,9 +348,9 @@ class ModulesRedacter extends Component {
               <label htmlFor="fname">{cnter[i].name}</label>
             </div>
             <div className="ncol-75">
-              <input type="text" id="fname" name="firstname"
-                     placeholder="Название скрипта.." value={this.state.vals[i]}
-                     name={i} onChange={this.handleInputChange}
+              <input type="text" id="fname"
+                     placeholder="Значение.." value={this.state.vals[cnter[i].arr]?this.state.vals[cnter[i].arr]:""}
+                     name={cnter[i].arr} onChange={this.handleInputChange}
               />
             </div>
           </div>
@@ -282,7 +370,7 @@ class ModulesRedacter extends Component {
               <label htmlFor="country">{cnter[i].name}</label>
             </div>
             <div className="ncol-75">
-              <select id="country" name="country" value={cnter[i].value}
+              <select id="country" value={this.state.vals[i]}
                       name={i} onChange={this.handleInputChange}
               >
                 {y}
@@ -360,7 +448,7 @@ class ModulesRedacter extends Component {
           {this.renderPages(this.state.pcur)}
 
           <div className="nrow">
-            <input type="submit" value="Submit" />
+            <input type="submit" value="Применить" disabled={!this.state.handledChanges} onClick={this.handleSubmit} />
           </div>
         </form>
 

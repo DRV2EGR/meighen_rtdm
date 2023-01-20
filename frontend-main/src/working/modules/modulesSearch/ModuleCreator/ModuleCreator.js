@@ -6,18 +6,20 @@ class ModuleCreator extends Component {
   myAttrs = {
     "modules": "модуля",
     "scripts": "скрипта",
-    "vars": "переменной"
+    "variables": "переменной"
   };
   constructor(props) {
     super(props);
     this.state = {
       compName: "",
+      compName2: "INTEGER",
       code: props.code ? props.code : '999',
       description: props.description ? props.description : 'Unknown error'
     }
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleClickCreate = this.handleClickCreate.bind(this);
+    this.renderInputs = this.renderInputs.bind(this);
   }
 
   async handleClickCreate(e) {
@@ -25,22 +27,40 @@ class ModuleCreator extends Component {
     const cookies = new Cookies();
     let a = cookies.get('accessToken');
 
-    let aty = await fetch('presenter/api/' + this.props.type + "/" + this.props.type.slice( 0, this.props.type.length-1 ) + "?name="+this.state.compName, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + a,
-      }
-    }).then(response => {
-      if (!response.ok) {
-        //throw new Error('Network response was not OK');
-        return response;
-      }
-      return response.json();
-    });
+    let aty;
+    if (this.props.type == "variables") {
+      aty = await fetch('presenter/api/' + this.props.type + "/" + this.props.type.slice(0, this.props.type.length - 1) + "?name=" + this.state.compName + "&type=" + this.state.compName2, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + a,
+        }
+      }).then(response => {
+        if (!response.ok) {
+          //throw new Error('Network response was not OK');
+          return response;
+        }
+        return response.json();
+      });
+    } else {
+      aty = await fetch('presenter/api/' + this.props.type + "/" + this.props.type.slice(0, this.props.type.length - 1) + "?name=" + this.state.compName, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + a,
+        }
+      }).then(response => {
+        if (!response.ok) {
+          //throw new Error('Network response was not OK');
+          return response;
+        }
+        return response.json();
+      });
+    }
 
     await this.setState({
-      compName:""
+      compName:"",
+      compName2:"INTEGER"
     });
 
     this.props.enab(aty.uuid);
@@ -55,6 +75,45 @@ class ModuleCreator extends Component {
     await this.setState({
       [name]: value
     });
+  }
+
+  renderInputs() {
+    if (this.props.type == "variables") {
+      return <div className="content">
+              <div className="diver">
+                <h4>Название: </h4>
+                <TextField
+                  id="standard-basic"
+                  variant="standard"
+                  name="compName"
+                  onChange={this.handleInputChange}
+                  autoFocus
+                />
+              </div>
+              <div className="diver">
+                <h4>Тип: </h4>
+                <select id="country" value={this.state.compName2}
+                        name="compName2" onChange={this.handleInputChange} >
+                  <option value="INTEGER">INTEGER</option>
+                  <option value="STRING">STRING</option>
+                  <option value="BOOLEAN">BOOLEAN</option>
+                </select>
+              </div>
+            </div>
+    } else {
+      return <div className="content">
+              <div className="diver">
+                <h4>Название: </h4>
+                <TextField
+                  id="standard-basic"
+                  variant="standard"
+                  name="compName"
+                  onChange={this.handleInputChange}
+                  autoFocus
+                />
+              </div>
+            </div>
+    }
   }
 
   render() {
@@ -75,15 +134,7 @@ class ModuleCreator extends Component {
       <div className="popup">
         <h2>Создание {this.myAttrs[this.props.type]}</h2>
         <a className="close" href="#">&times;</a>
-        <div className="content">
-          <h4>Название: </h4><TextField
-                              id="standard-basic"
-                              variant="standard"
-                              name="compName"
-                              onChange={this.handleInputChange}
-                              autoFocus
-                            />
-        </div>
+        {this.renderInputs()}
         <a href='#' className='btn-primary btn-success btn' onClick={this.handleClickCreate}>Создать</a>
       </div>
     );
