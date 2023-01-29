@@ -1,0 +1,36 @@
+{
+  "offset": {
+    "x": 0,
+    "y": 0,
+    "deltaX": -2,
+    "deltaY": 0,
+    "lastX": 500,
+    "lastY": 900
+  },
+    "nodes": {
+
+  },
+  "links": {
+    
+  },
+  "selected": {},
+  "hovered": {
+  },
+  "preNodes": [
+  ],
+  "isModelShow": false,
+  "nodeName": "Process",
+  "nodeId": "2",
+  "newNodeId": "2ba9a0b8-6745-4f40-8c24-071f0a6646cc",
+  "preLinks": [
+  ],
+  "showModelName": "newLinkModel",
+  "linkLabel": "",
+  "newLinkId": "39ffc36b-8f92-477c-bbf4-f67c357fb435",
+  "clickNodeId": "",
+  "modelOption": "addLabel",
+  "nodeRoleOption": "",
+  "clickLinkId": "",
+  "alertMessageInfo": "",
+  "alertMessageStatus": "init"
+}
