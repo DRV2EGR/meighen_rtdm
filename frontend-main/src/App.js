@@ -10,6 +10,9 @@ import SignUP from "./login_component/SignUP";
 import Login from "./login_component/Login";
 import CompMain from "./working/modules/CompMain";
 import EurekaElement from "./eureka/EurekaElement";
+import CanvMain from "./working/modules/modulesRedacter/canvMain/CanvMain";
+import DiagramFromJson from "./working/modules/modulesRedacter/canvMain/DiagramFromJson";
+// import DragAndDropSidebar from "./working/modules/modulesRedacter/canvMain/flowDiagram/DragAndDropSidebar";
 class App extends Component {
 
     async componentDidMount() {
@@ -29,6 +32,12 @@ class App extends Component {
                     <Route exact path={'/login'} component={Login}/>
 
                     <Route exact path={'/main'} component={CompMain} />
+
+                    <Route exact path={'/draw'} component={CanvMain} />
+                    <Route exact path={'/draw2'} component={DiagramFromJson} />
+                    {/*<Route exact path={'/draw3'} component={DragAndDropSidebar} />*/}
+
+                    {/*<Route exact path={'/draw3'} component={BodyWidget} />*/}
 
                     <Route>
                         <ErrorPage code={404} description={'Страница не найдена.'}/>

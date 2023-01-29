@@ -312,7 +312,6 @@ class Login extends Component {
                                                required
                                                name="_password"
                                                label="Пароль"
-                                               type="password"
                                                id="password"
                                                onChange={this.handleInputChange}
                                         />
