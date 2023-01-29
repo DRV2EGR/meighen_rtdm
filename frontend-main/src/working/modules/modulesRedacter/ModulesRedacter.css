@@ -442,3 +442,8 @@ form {
 
     background-color: #0f1660;
 }
+
+.m-node-lbl {
+    margin-bottom: 0;
+    padding: 0;
+}

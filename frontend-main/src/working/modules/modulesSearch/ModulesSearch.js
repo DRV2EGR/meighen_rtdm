@@ -132,7 +132,7 @@ class ModuleSearch extends Component {
                 </div>
 
                 <div className="paginater">
-                    <Pagination count={10} variant="outlined" shape="rounded" color="secondary"
+                    <Pagination variant="outlined" shape="rounded" color="secondary"
                                 onChange={this.handleChangePagin} count={this.props.mpgs}
                     />
                 </div>

@@ -1,6 +1,20 @@
 import React, {Component} from 'react';
 import './ModulesRedacter.css';
+import './CanvMain.css';
 import { Cookies } from "react-cookie";
+
+import Diagram, { createSchema, useSchema } from 'beautiful-react-diagrams';
+import { Button } from 'beautiful-react-ui';
+import CanvMain from "./canvMain/CanvMain";
+import DiagramFromJson from "./canvMain/DiagramFromJson";
+import createEngine from "@projectstorm/react-diagrams";
+// import App from "./canvMain/flowDiagram/App";
+// import { FlowChartWithState } from "./canvMain/flowDiagram";
+// import DragAndDropSidebar from "./canvMain/flowDiagram/DragAndDropSidebar";
+// import DragAndDropSidebar from "./canvMain/flowDiagram/DragAndDropSidebar";
+import './canvMain/flowDiagram/index';
+import { FlowChartWithState } from "./canvMain/flowDiagram";
+import FlowViewer from "./FlowViewer";
 
 class ModulesRedacter extends Component {
   myAttrs = {
@@ -12,6 +26,7 @@ class ModulesRedacter extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      engine: null,
       pcur: 0,
       vals: [],
       changesLog: [],
@@ -196,6 +211,7 @@ class ModulesRedacter extends Component {
           [
             {
               type: "modulesRenderer",
+              value: this.props.currentRedacterMeta.obj.body,
               presented: !(this.props.currentRedacterMeta.obj.iinternal),
               arr: 5
             }
@@ -220,7 +236,6 @@ class ModulesRedacter extends Component {
       }
     };
 
-
     let cnter = [];
     let rrrd = [];
     try {
@@ -232,6 +247,12 @@ class ModulesRedacter extends Component {
     }
     console.log("rrd= ", rrrd);
     if (prevProps !== this.props) {
+      if (this.state.pcur != 222) {
+        this.setState({engine : null});
+      } else {
+        this.setState({engine : createEngine()});
+      }
+
       this.setState({
         vals: rrrd,
         handledChanges: false,
@@ -384,8 +405,6 @@ class ModulesRedacter extends Component {
           <div className="nrow">
             <div className="ncol-25">
               <label htmlFor="lname">{cnter[i].name}</label>
-            </div>
-            <div className="ncol-75">
               <div className="switchers">
                 <input type="checkbox" id="switch3" switch="bool" checked={this.state.vals[i]}
                        name={i} onChange={this.handleInputChangeCheker}
@@ -395,15 +414,244 @@ class ModulesRedacter extends Component {
             </div>
           </div>
         );
+      } else if (cnter[i].type =="modulesRenderer") {
+        // console.log("WARN! ", this.props.currentRedacterMeta.obj.uuid);
+
+        var chartSimple=JSON.parse("{\"offset\":{\"x\":-1948,\"y\":-901,\"deltaX\":-2,\"deltaY\":0,\"lastX\":-1946,\"lastY\":-901},\"nodes\":{},\"links\":{},\"selected\":{},\"hovered\":{},\"preNodes\":[],\"isModelShow\":false,\"nodeName\":\"Process\",\"nodeId\":\"2\",\"newNodeId\":\"2ba9a0b8-6745-4f40-8c24-071f0a6646cc\",\"preLinks\":[],\"showModelName\":\"newLinkModel\",\"linkLabel\":\"\",\"newLinkId\":\"39ffc36b-8f92-477c-bbf4-f67c357fb435\",\"clickNodeId\":\"\",\"modelOption\":\"addLabel\",\"nodeRoleOption\":\"\",\"clickLinkId\":\"\",\"alertMessageInfo\":\"\",\"alertMessageStatus\":\"init\"}");
+        try {
+          if (this.props.currentRedacterMeta.obj.body != "" && this.props.currentRedacterMeta.obj.body != null) {
+            chartSimple = JSON.parse(this.props.currentRedacterMeta.obj.body);
+          }
+        } catch (e) {
+          // PASS
+        }
+        // fetch('/presenter')
+        //   .then(res => res.json())
+        //   .then(data => {
+        //     chartSimple = JSON.parse(data);
+        //   })
+        //   .then(() => {
+        //     console.log(chartSimple);
+        //   });
+
+        // let flw = new DragAndDropSidebar();
+        res.push(
+          <div className="canvMain">
+            {/*<DiagramFromJson body={this.props.currentRedacterMeta.obj.body} eng={this.state.engine} />*/}
+            {/*<iframe src={"http://localhost:3002/"} {...this.props}></iframe>*/}
+            {/*<DragAndDropSidebar />*/}
+            {/*<App />*/}
+            {/*{flw}*/}
+            <FlowViewer compUUID={this.props.currentRedacterMeta.obj.uuid} chartSimple={chartSimple}/>
+          </div>
+        );
       }
     }
 
     return res;
   }
 
-  renderPagesState(e) {
+  // writeToModule(bod) {
+  //   let vvv = this.state.vals;
+  //   let vvvChanges = []; //Array.apply(null, Array(this.state.vals.length)).map(function () {}); //[...this.state.vals];
+  //   for (let i = 0; i < this.state.vals.length; i++) {
+  //     if (this.state.changesLog[i]) { vvvChanges.push(this.state.changesLog[i]);}
+  //     else { vvvChanges.push(undefined); }
+  //   }
+  //   vvv[name] = value;
+  //   vvvChanges[name] = this.redacterElems[this.props.currentRedacterMeta.type].tpages[this.state.pcur][name].commitName;
+  //   this.setState({
+  //     vals:vvv,
+  //     changesLog: vvvChanges,
+  //     handledChanges: true
+  //   });
+  // }
+
+   renderPagesState(e) {
+    // this.redacterElems = {
+    //   scripts: {
+    //     pages: 4,
+    //     tpages: [
+    //       [
+    //         {
+    //           name: "Название",
+    //           type: "text",
+    //           value: this.props.currentRedacterMeta.obj?.name,
+    //           presented: true,
+    //           arr: 0,
+    //           commitName: "name"
+    //         }
+    //       ],
+    //       [
+    //         {
+    //           name: "Содержание",
+    //           type: "text",
+    //           value: this.props.currentRedacterMeta.obj?.body,
+    //           presented: true,
+    //           arr: 1,
+    //           commitName: "body"
+    //         }
+    //       ],
+    //       [
+    //         {
+    //           name: "Входящие значения",
+    //           type: "inVars",
+    //           arr: 2
+    //         }
+    //       ],
+    //       [
+    //         {
+    //           name: "Исходящие значения",
+    //           type: "outVars",
+    //           arr: 3
+    //         }
+    //       ]
+    //     ]
+    //   },
+    //   variables: {
+    //     pages: 1,
+    //     tpages: [
+    //       [
+    //         {
+    //           name: "Название",
+    //           type: "text",
+    //           value: this.props.currentRedacterMeta.obj?.name,
+    //           presented: true,
+    //           arr: 0,
+    //           commitName: "name"
+    //         },
+    //         {
+    //           name: "Тип",
+    //           type: "chose",
+    //           decisons: [
+    //             "INTEGER",
+    //             "STRING",
+    //             "BOOLEAN"
+    //           ],
+    //           value: this.props.currentRedacterMeta.obj?.type,
+    //           arr: 1,
+    //           commitName: "type"
+    //         },
+    //         {
+    //           name: "Значение",
+    //           type: "text",
+    //           value: this.props.currentRedacterMeta.obj?.value,
+    //           presented: true,
+    //           arr: 2,
+    //           commitName: "value"
+    //         }
+    //       ]
+    //     ]
+    //   },
+    //   modules: {
+    //     pages: 4,
+    //     tpages: [
+    //       [
+    //         {
+    //           name: "Название",
+    //           type: "text",
+    //           value: this.props.currentRedacterMeta.obj?.name,
+    //           presented: true,
+    //           arr: 0,
+    //           commitName: "name"
+    //         },
+    //         {
+    //           name: "Внешний модуль",
+    //           type: "switch",
+    //           value: !this.props.currentRedacterMeta.obj.iinternal,
+    //           presented: true,
+    //           arr: 1,
+    //           commitName: "iinternal"
+    //         },
+    //
+    //         {
+    //           name: "Начинающий скрипт",
+    //           type: "text",
+    //           value: this.props.currentRedacterMeta.obj?.firstScript,
+    //           presented: this.props.currentRedacterMeta.obj.iinternal,
+    //           notdepends: 1,
+    //           arr: 2,
+    //           commitName: "firstScript"
+    //         },
+    //         {
+    //           name: "Внешний адрес",
+    //           type: "text",
+    //           value: this.props.currentRedacterMeta.obj?.extModule?.callUrl,
+    //           presented: !(this.props.currentRedacterMeta.obj.iinternal),
+    //           depends: 1,
+    //           arr: 3,
+    //           commitName: "callUrl"
+    //         },
+    //         {
+    //           name: "Тип вызова",
+    //           type: "chose",
+    //           decisons: [
+    //             "REST",
+    //             "SOAP",
+    //             "RPC"
+    //           ],
+    //           value: this.props.currentRedacterMeta.obj?.extModule?.callType,
+    //           presented: !(this.props.currentRedacterMeta.obj.iinternal),
+    //           depends: 1,
+    //           arr: 4,
+    //           commitName: "callType"
+    //         }
+    //       ],
+    //
+    //       [
+    //         {
+    //           type: "modulesRenderer",
+    //           value: this.props.currentRedacterMeta.obj.body,
+    //           presented: !(this.props.currentRedacterMeta.obj.iinternal),
+    //           arr: 5
+    //         }
+    //       ],
+    //
+    //       [
+    //         {
+    //           name: "Входящие значения",
+    //           type: "inVars",
+    //           arr: 6
+    //         }
+    //       ],
+    //
+    //       [
+    //         {
+    //           name: "Исходящие значения",
+    //           type: "outVars",
+    //           arr: 7
+    //         }
+    //       ]
+    //     ]
+    //   }
+    // };
+    //
+    //
+    // let cnter = [];
+    // let rrrd = [];
+    // try {
+    //   cnter = this.redacterElems[this.props.currentRedacterMeta.type].tpages[this.state.pcur];
+    // } catch (e) {
+    // }
+    // for (let i = 0; i < cnter.length; i++) {
+    //   console.log("Nsetting +: ", [cnter[i].value]);
+    //   rrrd.push(cnter[i].value);
+    // }
+    // console.log("Nrrd= ", rrrd);
+    //  this.setState({
+    //   vals: rrrd,
+    //   handledChanges: false,
+    //   changesLog: []
+    // });
+    //
+    // if (this.state.pcur != 222) {
+    //    this.setState({engine : null});
+    // } else {
+    //   this.setState({engine : createEngine()});
+    // }
+
     console.log("VALUE: ", e.target.getAttribute("value"));
-    this.setState({pcur: e.target.getAttribute("value")});
+     this.setState({ pcur: e.target.getAttribute("value") });
   }
 
   renderPoints() {
@@ -430,7 +678,7 @@ class ModulesRedacter extends Component {
   render() {
     const {code, description} = this.state;
     return (
-      <div className={"redacterMain " + this.props.redacterTabClass}>
+      <div className={"root redacterMain " + this.props.redacterTabClass}>
         <div id="container">
 
           <h1> {this.myAttrs[this.props.currentRedacterMeta.type]}  <i> { this.props.currentRedacterMeta.obj.name}</i>  { this.props.readOnly?"[Read Only]":""}</h1>
@@ -444,7 +692,7 @@ class ModulesRedacter extends Component {
           {this.renderPoints()}
         </div>
 
-        <form>
+        <form className="root">
           {this.renderPages(this.state.pcur)}
 
           <div className="nrow">
