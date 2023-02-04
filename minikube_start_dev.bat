@@ -1,0 +1,1 @@
+minikube start --insecure-registry host.minikube.internal:31000
