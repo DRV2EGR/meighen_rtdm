@@ -13,4 +13,6 @@ public class Properties {
     @JsonProperty("Id")
     public String id;
     public String nodeRole;
+
+    public String nodeScript;
 }
