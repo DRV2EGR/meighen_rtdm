@@ -11,6 +11,10 @@ import {
 import { Input, Button, Select, Message } from './element'
 import Cookies from 'universal-cookie';
 
+import './style.css'
+import SelectSearch from 'react-select-search';
+import { ScriptInput } from "./element/ScriptInput";
+
 const ModelBox = styled.div`
   width: 100%;
   height: 100%;
@@ -99,6 +103,7 @@ export interface IFlowChartWithStateProps {
   nodeRoleOptions: any[]
   workFlowValue: any
   compUUID: any
+  select_scripts: any
 }
 
 let timer:any = null;
@@ -118,6 +123,7 @@ export class FlowChartWithState extends React.Component<IFlowChartWithStateProps
       isModelShow: false,
       showModelName: "",
       nodeName: "",
+      nodeScript: "",
       nodeId: "",
       nodeRoleOption: "",
       linkLabel: "",
@@ -127,7 +133,8 @@ export class FlowChartWithState extends React.Component<IFlowChartWithStateProps
       clickLinkId: "",
       modelOption: "addNode",
       alertMessageInfo: "",
-      alertMessageStatus: "init"
+      alertMessageStatus: "init",
+      select_scripts: []
     }
 
     this.handleSaveEvent = this.handleSaveEvent.bind(this);
@@ -145,12 +152,15 @@ export class FlowChartWithState extends React.Component<IFlowChartWithStateProps
       clickNodeId: nodeId,
       nodeName: clickNodeProperties.name,
       nodeId: clickNodeProperties.Id,
+      nodeScript: clickNodeProperties.nodeScript?clickNodeProperties.nodeScript:"",
       nodeRoleOption: !!clickNodeProperties.nodeRole ? clickNodeProperties.nodeRole : ""
     }, () => {
       this.setState({
         isModelShow: true
       })
     })
+
+    console.log("D-CLICKED! ", clickNodeProperties);
   }
 
   onLabelDoubleClick: IOnLabelDoubleClick = ({linkId}) => {
@@ -184,7 +194,9 @@ export class FlowChartWithState extends React.Component<IFlowChartWithStateProps
     });
   }
 
-  handleCancelEditNode = () => {
+  handleCancelEditNode = (e: any) => {
+    e.preventDefault();
+
     if (this.state.modelOption === "addNode") {
       let _newNodeId = this.state.newNodeId
       let _nodes = {}
@@ -224,9 +236,19 @@ export class FlowChartWithState extends React.Component<IFlowChartWithStateProps
     });
   }
 
-  handleScriptInput = (e: any) => {
+  handleScriptInput = async (e: any) => {
+    // let rr: any = [];
+    // await fetch("presenter/api/scripts/?size=5")
+    //   .then(res => res.json())
+    //   .then(async y => rr=y)
+    //   .catch(console.log);
+    // this.setState({
+    //   select_scripts: rr
+    // });
+
+    console.log("ctg = ", e);
     this.setState({
-      nodeScript: e.currentTarget.value
+      nodeScript: e
     });
   }
 
@@ -236,7 +258,8 @@ export class FlowChartWithState extends React.Component<IFlowChartWithStateProps
     });
   }
 
-  setNodeInfo = (): boolean => {
+  setNodeInfo = (e: any): boolean => {
+    e.preventDefault();
     // console.log("nodeName: ", this.state.nodeName)
     if (this.state.nodeName.trim() === "") {
       this.warningMessage("Please input the node name!")
@@ -247,12 +270,15 @@ export class FlowChartWithState extends React.Component<IFlowChartWithStateProps
     _nodes[_nodeId].properties = {
       name: this.state.nodeName,
       Id: this.state.nodeId,
-      nodeRole: this.state.nodeRoleOption
+      nodeRole: this.state.nodeRoleOption,
+      nodeScript: this.state.nodeScript
     }
     this.setState({
       nodes: _nodes,
       isModelShow: false
     });
+
+    console.log("properties: ", _nodes[_nodeId].properties);
     return true
   }
 
@@ -282,15 +308,20 @@ export class FlowChartWithState extends React.Component<IFlowChartWithStateProps
     })
   }
 
+  async fetchMyScripts() {
+    return await fetch("presenter/api/scripts/?size=5");
+  }
+
   renderAddNewNodeModel = () => {
     const { nodeRoleOptions = [] } = this.props
-    // console.log("nodeRoleOptions: ", nodeRoleOptions)
+    let options = this.state.select_scripts //this.props.select_scripts
+    console.log("Options: ", options)
     return (
       <ModelBox className={this.state.isModelShow ? "" : "hide"}>
         <ModelContent>
           <div className="InputBox">
             <InputBox>
-              <label>Name:</label>
+              <label className="m-node-lbl">Name:</label>
               <Input onChange={this.handleNameInput} value={this.state.nodeName} type="text" />
             </InputBox>
             {/*<InputBox>*/}
@@ -306,8 +337,10 @@ export class FlowChartWithState extends React.Component<IFlowChartWithStateProps
             {/*    </Select>*/}
             {/*</InputBox>*/}
             <InputBox>
-              <label>Script:</label>
+              <label className="m-node-lbl">Script:</label>
               <Input onChange={this.handleScriptInput} value={this.state.nodeScript} type="text" />
+              {/*<SelectSearch options={options} value="sv" search={true} placeholder="Choose your language" />*/}
+              {/*<ScriptInput  onChange={this.handleScriptInput} type={options} value={this.state.nodeScript} />*/}
             </InputBox>
           </div>
           <ButtonBox>
@@ -362,6 +395,8 @@ export class FlowChartWithState extends React.Component<IFlowChartWithStateProps
   }
 
   componentDidUpdate() {
+    console.log("componentDidUpdate!");
+
     //get work flow data
     let flowData = this.state
     delete flowData.offset.node
@@ -416,7 +451,8 @@ export class FlowChartWithState extends React.Component<IFlowChartWithStateProps
         modelOption: "addNode",
         newNodeId: newNode[0],
         nodeName: "",
-        nodeId: ""
+        nodeId: "",
+        nodeScript: ""
       });
     }
     if (Object.keys(this.state.nodes).length != this.state.preNodes.length) {

@@ -60,6 +60,7 @@
     "react-preloader-icon": "^1.0.0",
     "react-router": "^5.2.0",
     "react-scripts": "4.0.2",
+    "react-select-search": "^4.1.6",
     "resize-observer-polyfill": "^1.5.1",
     "rud": "^1.0.5",
     "styled-components": "^5.3.5",

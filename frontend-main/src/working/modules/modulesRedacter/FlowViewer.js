@@ -291,7 +291,7 @@ background: rgba(0,0,0,0.05);
 
     // let cookies = new Cookies();
     // cookies.set('workFlowValue', newWorkFlowValue, {path: '/'});
-    console.log("work-flow 的JSON数据： ", JSON.stringify(workFlowValue))
+    // console.log("work-flow 的JSON数据： ", JSON.stringify(workFlowValue))
     // console.log("cookie: ", cookies.get('workFlowValue'))
   }
 
@@ -315,6 +315,7 @@ background: rgba(0,0,0,0.05);
           config={{ readonly: false }}
           workFlowValue={getCurrentWorkFlowValue}
           compUUID={props}
+          select_scripts={props.select_scripts}
         />
       </Content>
       <Sidebar>

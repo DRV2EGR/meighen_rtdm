@@ -29,7 +29,8 @@ export interface IChart {
   alertMessageStatus: string
   clickLinkId: string
   preNodes: any,
-  preLinks: any
+  preLinks: any,
+  select_scripts: any
 }
 
 export interface ISelectedOrHovered {

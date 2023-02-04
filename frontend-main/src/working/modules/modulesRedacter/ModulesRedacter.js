@@ -30,6 +30,7 @@ class ModulesRedacter extends Component {
       pcur: 0,
       vals: [],
       changesLog: [],
+      select_scripts: [],
       handledChanges: false,
       code: props.code ? props.code : '999',
       description: props.description ? props.description : 'Unknown error'
@@ -77,7 +78,7 @@ class ModulesRedacter extends Component {
     this.setState({handledChanges: false});
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  async componentDidUpdate(prevProps, prevState, snapshot) {
     this.redacterElems = {
       scripts: {
         pages: 4,
@@ -240,7 +241,8 @@ class ModulesRedacter extends Component {
     let rrrd = [];
     try {
       cnter = this.redacterElems[this.props.currentRedacterMeta.type].tpages[this.state.pcur];
-    } catch (e) {}
+    } catch (e) {
+    }
     for (let i = 0; i < cnter.length; i++) {
       console.log("setting +: ", [cnter[i].value]);
       rrrd.push(cnter[i].value);
@@ -248,9 +250,9 @@ class ModulesRedacter extends Component {
     console.log("rrd= ", rrrd);
     if (prevProps !== this.props) {
       if (this.state.pcur != 222) {
-        this.setState({engine : null});
+        this.setState({ engine: null });
       } else {
-        this.setState({engine : createEngine()});
+        this.setState({ engine: createEngine() });
       }
 
       this.setState({
@@ -435,6 +437,9 @@ class ModulesRedacter extends Component {
         //   });
 
         // let flw = new DragAndDropSidebar();
+        // console.log("ter ", rr);
+
+
         res.push(
           <div className="canvMain">
             {/*<DiagramFromJson body={this.props.currentRedacterMeta.obj.body} eng={this.state.engine} />*/}
@@ -442,7 +447,11 @@ class ModulesRedacter extends Component {
             {/*<DragAndDropSidebar />*/}
             {/*<App />*/}
             {/*{flw}*/}
-            <FlowViewer compUUID={this.props.currentRedacterMeta.obj.uuid} chartSimple={chartSimple}/>
+            <FlowViewer compUUID={this.props.currentRedacterMeta.obj.uuid} chartSimple={chartSimple}
+                        select_scripts={[
+                          {name: 'Swedish', value: 'sv'},
+                          {name: 'English', value: 'en'},]}
+            />
           </div>
         );
       }
@@ -467,192 +476,209 @@ class ModulesRedacter extends Component {
   //   });
   // }
 
-   renderPagesState(e) {
-    // this.redacterElems = {
-    //   scripts: {
-    //     pages: 4,
-    //     tpages: [
-    //       [
-    //         {
-    //           name: "Название",
-    //           type: "text",
-    //           value: this.props.currentRedacterMeta.obj?.name,
-    //           presented: true,
-    //           arr: 0,
-    //           commitName: "name"
-    //         }
-    //       ],
-    //       [
-    //         {
-    //           name: "Содержание",
-    //           type: "text",
-    //           value: this.props.currentRedacterMeta.obj?.body,
-    //           presented: true,
-    //           arr: 1,
-    //           commitName: "body"
-    //         }
-    //       ],
-    //       [
-    //         {
-    //           name: "Входящие значения",
-    //           type: "inVars",
-    //           arr: 2
-    //         }
-    //       ],
-    //       [
-    //         {
-    //           name: "Исходящие значения",
-    //           type: "outVars",
-    //           arr: 3
-    //         }
-    //       ]
-    //     ]
-    //   },
-    //   variables: {
-    //     pages: 1,
-    //     tpages: [
-    //       [
-    //         {
-    //           name: "Название",
-    //           type: "text",
-    //           value: this.props.currentRedacterMeta.obj?.name,
-    //           presented: true,
-    //           arr: 0,
-    //           commitName: "name"
-    //         },
-    //         {
-    //           name: "Тип",
-    //           type: "chose",
-    //           decisons: [
-    //             "INTEGER",
-    //             "STRING",
-    //             "BOOLEAN"
-    //           ],
-    //           value: this.props.currentRedacterMeta.obj?.type,
-    //           arr: 1,
-    //           commitName: "type"
-    //         },
-    //         {
-    //           name: "Значение",
-    //           type: "text",
-    //           value: this.props.currentRedacterMeta.obj?.value,
-    //           presented: true,
-    //           arr: 2,
-    //           commitName: "value"
-    //         }
-    //       ]
-    //     ]
-    //   },
-    //   modules: {
-    //     pages: 4,
-    //     tpages: [
-    //       [
-    //         {
-    //           name: "Название",
-    //           type: "text",
-    //           value: this.props.currentRedacterMeta.obj?.name,
-    //           presented: true,
-    //           arr: 0,
-    //           commitName: "name"
-    //         },
-    //         {
-    //           name: "Внешний модуль",
-    //           type: "switch",
-    //           value: !this.props.currentRedacterMeta.obj.iinternal,
-    //           presented: true,
-    //           arr: 1,
-    //           commitName: "iinternal"
-    //         },
-    //
-    //         {
-    //           name: "Начинающий скрипт",
-    //           type: "text",
-    //           value: this.props.currentRedacterMeta.obj?.firstScript,
-    //           presented: this.props.currentRedacterMeta.obj.iinternal,
-    //           notdepends: 1,
-    //           arr: 2,
-    //           commitName: "firstScript"
-    //         },
-    //         {
-    //           name: "Внешний адрес",
-    //           type: "text",
-    //           value: this.props.currentRedacterMeta.obj?.extModule?.callUrl,
-    //           presented: !(this.props.currentRedacterMeta.obj.iinternal),
-    //           depends: 1,
-    //           arr: 3,
-    //           commitName: "callUrl"
-    //         },
-    //         {
-    //           name: "Тип вызова",
-    //           type: "chose",
-    //           decisons: [
-    //             "REST",
-    //             "SOAP",
-    //             "RPC"
-    //           ],
-    //           value: this.props.currentRedacterMeta.obj?.extModule?.callType,
-    //           presented: !(this.props.currentRedacterMeta.obj.iinternal),
-    //           depends: 1,
-    //           arr: 4,
-    //           commitName: "callType"
-    //         }
-    //       ],
-    //
-    //       [
-    //         {
-    //           type: "modulesRenderer",
-    //           value: this.props.currentRedacterMeta.obj.body,
-    //           presented: !(this.props.currentRedacterMeta.obj.iinternal),
-    //           arr: 5
-    //         }
-    //       ],
-    //
-    //       [
-    //         {
-    //           name: "Входящие значения",
-    //           type: "inVars",
-    //           arr: 6
-    //         }
-    //       ],
-    //
-    //       [
-    //         {
-    //           name: "Исходящие значения",
-    //           type: "outVars",
-    //           arr: 7
-    //         }
-    //       ]
-    //     ]
-    //   }
-    // };
-    //
-    //
-    // let cnter = [];
-    // let rrrd = [];
-    // try {
-    //   cnter = this.redacterElems[this.props.currentRedacterMeta.type].tpages[this.state.pcur];
-    // } catch (e) {
-    // }
-    // for (let i = 0; i < cnter.length; i++) {
-    //   console.log("Nsetting +: ", [cnter[i].value]);
-    //   rrrd.push(cnter[i].value);
-    // }
-    // console.log("Nrrd= ", rrrd);
-    //  this.setState({
-    //   vals: rrrd,
-    //   handledChanges: false,
-    //   changesLog: []
-    // });
-    //
-    // if (this.state.pcur != 222) {
-    //    this.setState({engine : null});
-    // } else {
-    //   this.setState({engine : createEngine()});
-    // }
+   async renderPagesState(e) {
+     // this.redacterElems = {
+     //   scripts: {
+     //     pages: 4,
+     //     tpages: [
+     //       [
+     //         {
+     //           name: "Название",
+     //           type: "text",
+     //           value: this.props.currentRedacterMeta.obj?.name,
+     //           presented: true,
+     //           arr: 0,
+     //           commitName: "name"
+     //         }
+     //       ],
+     //       [
+     //         {
+     //           name: "Содержание",
+     //           type: "text",
+     //           value: this.props.currentRedacterMeta.obj?.body,
+     //           presented: true,
+     //           arr: 1,
+     //           commitName: "body"
+     //         }
+     //       ],
+     //       [
+     //         {
+     //           name: "Входящие значения",
+     //           type: "inVars",
+     //           arr: 2
+     //         }
+     //       ],
+     //       [
+     //         {
+     //           name: "Исходящие значения",
+     //           type: "outVars",
+     //           arr: 3
+     //         }
+     //       ]
+     //     ]
+     //   },
+     //   variables: {
+     //     pages: 1,
+     //     tpages: [
+     //       [
+     //         {
+     //           name: "Название",
+     //           type: "text",
+     //           value: this.props.currentRedacterMeta.obj?.name,
+     //           presented: true,
+     //           arr: 0,
+     //           commitName: "name"
+     //         },
+     //         {
+     //           name: "Тип",
+     //           type: "chose",
+     //           decisons: [
+     //             "INTEGER",
+     //             "STRING",
+     //             "BOOLEAN"
+     //           ],
+     //           value: this.props.currentRedacterMeta.obj?.type,
+     //           arr: 1,
+     //           commitName: "type"
+     //         },
+     //         {
+     //           name: "Значение",
+     //           type: "text",
+     //           value: this.props.currentRedacterMeta.obj?.value,
+     //           presented: true,
+     //           arr: 2,
+     //           commitName: "value"
+     //         }
+     //       ]
+     //     ]
+     //   },
+     //   modules: {
+     //     pages: 4,
+     //     tpages: [
+     //       [
+     //         {
+     //           name: "Название",
+     //           type: "text",
+     //           value: this.props.currentRedacterMeta.obj?.name,
+     //           presented: true,
+     //           arr: 0,
+     //           commitName: "name"
+     //         },
+     //         {
+     //           name: "Внешний модуль",
+     //           type: "switch",
+     //           value: !this.props.currentRedacterMeta.obj.iinternal,
+     //           presented: true,
+     //           arr: 1,
+     //           commitName: "iinternal"
+     //         },
+     //
+     //         {
+     //           name: "Начинающий скрипт",
+     //           type: "text",
+     //           value: this.props.currentRedacterMeta.obj?.firstScript,
+     //           presented: this.props.currentRedacterMeta.obj.iinternal,
+     //           notdepends: 1,
+     //           arr: 2,
+     //           commitName: "firstScript"
+     //         },
+     //         {
+     //           name: "Внешний адрес",
+     //           type: "text",
+     //           value: this.props.currentRedacterMeta.obj?.extModule?.callUrl,
+     //           presented: !(this.props.currentRedacterMeta.obj.iinternal),
+     //           depends: 1,
+     //           arr: 3,
+     //           commitName: "callUrl"
+     //         },
+     //         {
+     //           name: "Тип вызова",
+     //           type: "chose",
+     //           decisons: [
+     //             "REST",
+     //             "SOAP",
+     //             "RPC"
+     //           ],
+     //           value: this.props.currentRedacterMeta.obj?.extModule?.callType,
+     //           presented: !(this.props.currentRedacterMeta.obj.iinternal),
+     //           depends: 1,
+     //           arr: 4,
+     //           commitName: "callType"
+     //         }
+     //       ],
+     //
+     //       [
+     //         {
+     //           type: "modulesRenderer",
+     //           value: this.props.currentRedacterMeta.obj.body,
+     //           presented: !(this.props.currentRedacterMeta.obj.iinternal),
+     //           arr: 5
+     //         }
+     //       ],
+     //
+     //       [
+     //         {
+     //           name: "Входящие значения",
+     //           type: "inVars",
+     //           arr: 6
+     //         }
+     //       ],
+     //
+     //       [
+     //         {
+     //           name: "Исходящие значения",
+     //           type: "outVars",
+     //           arr: 7
+     //         }
+     //       ]
+     //     ]
+     //   }
+     // };
+     //
+     //
+     // let cnter = [];
+     // let rrrd = [];
+     // try {
+     //   cnter = this.redacterElems[this.props.currentRedacterMeta.type].tpages[this.state.pcur];
+     // } catch (e) {
+     // }
+     // for (let i = 0; i < cnter.length; i++) {
+     //   console.log("Nsetting +: ", [cnter[i].value]);
+     //   rrrd.push(cnter[i].value);
+     // }
+     // console.log("Nrrd= ", rrrd);
+     //  this.setState({
+     //   vals: rrrd,
+     //   handledChanges: false,
+     //   changesLog: []
+     // });
+     //
+     // if (this.state.pcur != 222) {
+     //    this.setState({engine : null});
+     // } else {
+     //   this.setState({engine : createEngine()});
+     // }
 
-    console.log("VALUE: ", e.target.getAttribute("value"));
+
+     if (e.target.getAttribute("value") == 1) {
+       console.log("PUPPY PUP");
+       await fetch("presenter/api/scripts/?size=5")
+         .then(res => res.json())
+         .then(async y => await this.setState({
+           select_scripts: (y.objects).map((datum) => {
+             return {
+               name: datum.name,
+               value: datum.name
+             }
+           })
+         }))
+         .then(console.log)
+         .catch(console.log);
+     }
+
+     console.log("VALUE: ", e.target.getAttribute("value"));
      this.setState({ pcur: e.target.getAttribute("value") });
-  }
+   }
 
   renderPoints() {
     let res = [];
