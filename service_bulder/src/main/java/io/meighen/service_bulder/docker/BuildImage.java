@@ -23,6 +23,7 @@ import com.github.dockerjava.core.command.PushImageResultCallback;
 import org.apache.commons.lang.SystemUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,12 +39,15 @@ public class BuildImage {
                 .getInstance(instanceURL)
                 .build();
 
-        URL resource = new ClassPathResource("demo/Dockerfile").getURL();
+//        URL resource = new ClassPathResource("demo/Dockerfile").getURL();
+        File dest = new File(new FileSystemResource("/tempa").getFile().getAbsolutePath());
+        URL resource = dest.toURL();
+
         System.out.println(resource.toURI());
 //
         try {
             System.out.println(String.format("\n==> %s\n",
-                    dockerClient.buildImageCmd(new File(resource.toURI()))
+                    dockerClient.buildImageCmd(dest)
 //                        .withRemove()
                             .withTag(registryURL + "/" + name)
                             .exec(new BuildImageResultCallback())
