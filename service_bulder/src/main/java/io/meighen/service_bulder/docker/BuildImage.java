@@ -20,6 +20,7 @@ import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
+import io.meighen.service_bulder.service.producers.TemplateCreateDeployment;
 import org.apache.commons.lang.SystemUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -29,18 +30,23 @@ import org.springframework.stereotype.Service;
 @Service
 public class BuildImage {
     @Value("${docker.instance.url}")
-    private String instanceURL;
+    private String instanceURL; // = "tcp://localhost:2375";
 
     @Value("${docker.registry.url}")
-    private String registryURL;
+    private String registryURL; // = "localhost:31000";
 
-    public void build(String name) throws URISyntaxException, IOException {
+//    public static void main(String[] args) throws URISyntaxException, IOException {
+//        BuildImage bi = new BuildImage();
+//        bi.build("main_camp");
+//    }
+
+    public TemplateCreateDeployment build(String name) throws URISyntaxException, IOException {
         DockerClient dockerClient = DockerClientBuilder
                 .getInstance(instanceURL)
                 .build();
 
 //        URL resource = new ClassPathResource("demo/Dockerfile").getURL();
-        File dest = new File(new FileSystemResource("/tempa").getFile().getAbsolutePath());
+        File dest = new File(new FileSystemResource("/tempa/Dockerfile").getFile().getAbsolutePath());
         URL resource = dest.toURL();
 
         System.out.println(resource.toURI());
@@ -77,6 +83,13 @@ public class BuildImage {
 //                .withTag("ex-ter")
                 .exec(new PushImageResultCallback())
                 .awaitSuccess();
+
+        return new TemplateCreateDeployment(
+                name,
+                registryURL,
+                name,
+                "8080"
+        );
 
 
 //                var dockerClient

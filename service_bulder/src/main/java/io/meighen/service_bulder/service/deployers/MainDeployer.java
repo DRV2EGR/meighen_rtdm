@@ -3,6 +3,7 @@ package io.meighen.service_bulder.service.deployers;
 import io.meighen.service_bulder.docker.BuildImage;
 import io.meighen.service_bulder.kubernetes.MyKuber.CreateDeployment;
 import io.meighen.service_bulder.kubernetes.MyKuber.CreateService;
+import io.meighen.service_bulder.service.producers.TemplateCreateDeployment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +23,25 @@ public class MainDeployer {
     CreateService createService;
 
     public void deploy(String name) {
-        try {
-            buildImage.build(name);
-            logger.info("Service " + name + " built!");
-        } catch (Exception e) {
-            logger.error("Service " + name + " not built!", e.getCause());
-        }
+//        try {
+//            buildImage.build(name);
+//            logger.info("Service " + name + " built!");
+//        } catch (Exception e) {
+//            logger.error("Service " + name + " not built!", e.getCause());
+//        }
 
         createDeployment.create(name, "host.minikube.internal:31000/"+name, 8080);
         createService.create(name);
+    }
+
+    public TemplateCreateDeployment build(String name) {
+        try {
+            TemplateCreateDeployment t = buildImage.build(name);
+            logger.info("Service " + name + " built!");
+            return t;
+        } catch (Exception e) {
+            logger.error("Service " + name + " not built!", e.getCause());
+            return null;
+        }
     }
 }

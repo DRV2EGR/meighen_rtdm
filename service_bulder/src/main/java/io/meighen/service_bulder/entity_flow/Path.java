@@ -31,4 +31,5 @@ public class Path {
     public String clickLinkId;
     public String alertMessageInfo;
     public String alertMessageStatus;
+    public String moduleName;
 }
