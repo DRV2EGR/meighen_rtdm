@@ -1,0 +1,1 @@
+{"app_name":"myapp","registry_host":"host.minikube.internal:31000","image":"main_camp","port":"8080"}
