@@ -1,3 +1,14 @@
 .choser {
     top: 200px;
 }
+
+/*footer {*/
+
+/*    position:absolute;*/
+/*    bottom:0;*/
+/*    width: 100%;*/
+/*}*/
+
+.my-flex-1 {
+    flex: 1;
+}

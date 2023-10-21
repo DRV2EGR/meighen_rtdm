@@ -19,4 +19,7 @@ public class Module extends BaseObjEntity {
     protected Script firstScript;
     @Column(columnDefinition="text")
     protected String body;
+
+    @OneToOne
+    ModuleInfo moduleInfo;
 }

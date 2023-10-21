@@ -20,9 +20,9 @@ object ConsumerPlayground extends App {
   object M extends CC[Map[String, Any]]
 
   val consumerProperties = new Properties()
-  consumerProperties.setProperty(BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
+  consumerProperties.setProperty(BOOTSTRAP_SERVERS_CONFIG, sys.env("KAFKA_URL"))
   consumerProperties.setProperty(GROUP_ID_CONFIG, "group-id-2")
-  consumerProperties.setProperty(KEY_DESERIALIZER_CLASS_CONFIG, classOf[IntegerDeserializer].getName)
+  consumerProperties.setProperty(KEY_DESERIALIZER_CLASS_CONFIG, classOf[StringDeserializer].getName)
   consumerProperties.setProperty(VALUE_DESERIALIZER_CLASS_CONFIG, classOf[StringDeserializer].getName)
   consumerProperties.setProperty(AUTO_OFFSET_RESET_CONFIG, "latest")
   consumerProperties.setProperty(ENABLE_AUTO_COMMIT_CONFIG, "false")

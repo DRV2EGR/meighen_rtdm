@@ -5,10 +5,8 @@ import java.util.List;
 
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import io.meighen.presenter.entity.User;
-import io.meighen.presenter.entity.ExtModule;
+import io.meighen.presenter.entity.*;
 import io.meighen.presenter.entity.Object;
-import io.meighen.presenter.entity.Script;
 import lombok.Data;
 
 @Data
@@ -29,4 +27,5 @@ public class ModuleDto {
     public LocalDateTime dateModification;
 
     public UserDto lastModifier;
+    public ModuleInfo moduleInfo;
 }

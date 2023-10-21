@@ -1,0 +1,95 @@
+.container-step {
+    color: black;
+    z-index: 200;
+}
+
+.progressbar {
+    counter-reset: step;
+    z-index: 200;
+}
+
+.progressbar li {
+    position: relative;
+    list-style: none;
+    float: left;
+    width: 33.33%;
+    text-align: center;
+}
+
+/* Circles */
+.progressbar li:before {
+    content: counter(step);
+    counter-increment: step;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #000000;
+    display: block;
+    text-align: center;
+    margin: 0 auto 5px auto;
+    border-radius: 50%;
+    background-color: #FF9100;
+
+    /* Center # in circle */
+    line-height: 29px;
+    position: relative;
+    z-index: 200;
+
+}
+
+.progressbar li:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    background: orange ;
+    top: 15px; /*half of height Parent (li) */
+    left: -50%;
+    z-index: 1;
+}
+
+.progressbar li:first-child:after {
+    content: none;
+    z-index: 200;
+}
+
+.progressbar li.done:before {
+    background: #00E676;
+    content: "✔";
+    z-index: 200;
+}
+
+.progressbar li.done:after {
+    background: #00E676;
+}
+
+.progressbar li.fail:before {
+    background: #e60000;
+    content: "❌";
+    z-index: 200;
+}
+
+.progressbar li.fail:after {
+    background: #e60000;
+}
+
+.progressbar li.skip:before {
+    background: #707070;
+    content: "";
+    z-index: 200;
+}
+
+.progressbar li.skip:after {
+    background: #707070;
+}
+
+.progressbar li.active + li:after {
+    background: #00E676;
+}
+
+.nav-li-text-steps {
+    position: relative;
+    list-style: none;
+    float: left;
+    width: 33.33%;
+    text-align: center;
+}

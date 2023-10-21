@@ -20,6 +20,8 @@
 		<java.version>11</java.version>
 		<spring-cloud.version>2020.0.0-RC1</spring-cloud.version>
 		<org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+
+		<start-class>io.meighen.service_bulder.ServiceBulderApplication</start-class>
 	</properties>
 
 	<dependencies>

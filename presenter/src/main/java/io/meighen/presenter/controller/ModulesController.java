@@ -5,14 +5,17 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import io.meighen.presenter.entity.Backup;
+import io.meighen.presenter.entity.ModuleInfo;
 import io.meighen.presenter.entity.dto.CountPagesDto;
 import io.meighen.presenter.entity.Module;
 import io.meighen.presenter.entity.Object;
 import io.meighen.presenter.entity.dto.ModuleDto;
 import io.meighen.presenter.mapper.ObjectMapper;
 import io.meighen.presenter.repository.BackupRepository;
+import io.meighen.presenter.repository.ModuleInfoReposirory;
 import io.meighen.presenter.repository.ModuleRepository;
 import io.meighen.presenter.repository.ObjectRepository;
+import io.meighen.presenter.service.ProducerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +38,10 @@ public class ModulesController extends BasicPrivateController {
     @Autowired
     private BackupRepository backupRepository;
 
+    @Autowired
+    private ProducerService producerService;
+    @Autowired
+    private ModuleInfoReposirory moduleInfoReposirory;
 
     @GetMapping("/")
     public ResponseEntity<Map<String, java.lang.Object>> getModulesByPage(
@@ -201,6 +208,11 @@ public class ModulesController extends BasicPrivateController {
         object.setObjUUID(module.getUuid());
         objectRepository.save(object);
 
+        ModuleInfo moduleInfo = new ModuleInfo();
+        moduleInfo.setStatus("created");
+        moduleInfo.setState(0);
+        moduleInfoReposirory.save(moduleInfo);
+
         return ResponseEntity.ok(module);
     }
 
@@ -213,6 +225,11 @@ public class ModulesController extends BasicPrivateController {
         Module module = moduleRepository.findByUuid(uuid);
         moduleDto.setDateModification(LocalDateTime.now());
         mapper.updateModuleFromDto(moduleDto, module);
+
+        ModuleInfo moduleInfo = module.getModuleInfo();
+        moduleInfo.setState(0);
+        moduleInfoReposirory.save(moduleInfo);
+
         moduleRepository.save(module);
 
         return ResponseEntity.ok("OK");
@@ -233,6 +250,8 @@ public class ModulesController extends BasicPrivateController {
         backup.setLastModifier(getAuthentificatedUser());
         backup.setType("MODULE");
         backup.setBody(module.toString());
+
+        moduleInfoReposirory.delete(module.getModuleInfo());
 
         backupRepository.save(backup);
         moduleRepository.delete(module);

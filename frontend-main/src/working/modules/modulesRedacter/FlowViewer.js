@@ -319,9 +319,9 @@ background: rgba(0,0,0,0.05);
         />
       </Content>
       <Sidebar>
-        <Message>
-          Drag and drop these items onto the canvas.
-        </Message>
+        {/*<Message>*/}
+        {/*  Drag and drop these items onto the canvas.*/}
+        {/*</Message>*/}
         <SidebarItem type="start" caption="Начальный блок" ports={startPoint} itemStyle={startItemStyle} />
         <SidebarItem type="process-queue" caption="Модуль" ports={processQueuePoint} />
         <SidebarItem type="process-point"  caption="Скрипт" ports={processPoint} />

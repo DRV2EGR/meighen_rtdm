@@ -11,6 +11,9 @@ import {
 import { Input, Button, Select, Message } from './element'
 import Cookies from 'universal-cookie';
 
+// @ts-ignore
+import ReactTextareaAutocomplete from "@webscopeio/react-textarea-autocomplete";
+
 import './style.css'
 import SelectSearch from 'react-select-search';
 import { ScriptInput } from "./element/ScriptInput";
@@ -238,18 +241,28 @@ export class FlowChartWithState extends React.Component<IFlowChartWithStateProps
 
   handleScriptInput = async (e: any) => {
     // let rr: any = [];
-    // await fetch("presenter/api/scripts/?size=5")
-    //   .then(res => res.json())
+    console.log("ctg = ", e.target.value);
+    await this.setState({
+      nodeScript: e.target.value
+    });
+
+    let decisions = await fetch("presenter/api/scripts/?name="+e.target.value.replace('{','')+"&size=3")
+      .then(res => res.json());
+    console.log("decisions = ", decisions?.objects);
+
+    let yy = [];
+    for (let o = 0; o < decisions?.objects.length; ++o) {
+      yy.push({
+        name: decisions?.objects[o].name
+      });
+    }
     //   .then(async y => rr=y)
     //   .catch(console.log);
-    // this.setState({
-    //   select_scripts: rr
-    // });
 
-    console.log("ctg = ", e);
     this.setState({
-      nodeScript: e
+      select_scripts: yy
     });
+
   }
 
   handleLinkDescriptionInput = (e: any) => {
@@ -316,6 +329,8 @@ export class FlowChartWithState extends React.Component<IFlowChartWithStateProps
     const { nodeRoleOptions = [] } = this.props
     let options = this.state.select_scripts //this.props.select_scripts
     console.log("Options: ", options)
+    // @ts-ignore
+    const Item = ({ entity: { name } }) => <div>{`${name}`}</div>;
     return (
       <ModelBox className={this.state.isModelShow ? "" : "hide"}>
         <ModelContent>
@@ -338,7 +353,20 @@ export class FlowChartWithState extends React.Component<IFlowChartWithStateProps
             {/*</InputBox>*/}
             <InputBox>
               <label className="m-node-lbl">Script:</label>
-              <Input onChange={this.handleScriptInput} value={this.state.nodeScript} type="text" />
+              <ReactTextareaAutocomplete
+                onChange={this.handleScriptInput}
+                value={this.state.nodeScript} type="text"
+                loadingComponent={() => <span>Loading</span>}
+                trigger={{
+                 "{": {
+                   dataProvider: () => {
+                     return this.state.select_scripts;
+                   },
+                   component: Item,
+                   output: (item: { name: any }, trigger: any) => item.name
+                 }
+                }}
+              />
               {/*<SelectSearch options={options} value="sv" search={true} placeholder="Choose your language" />*/}
               {/*<ScriptInput  onChange={this.handleScriptInput} type={options} value={this.state.nodeScript} />*/}
             </InputBox>

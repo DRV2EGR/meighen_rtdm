@@ -4,26 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.List;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.InspectContainerResponse;
-import com.github.dockerjava.api.command.ListContainersCmd;
-import com.github.dockerjava.api.command.ListImagesCmd;
-import com.github.dockerjava.api.command.PushImageCmd;
-import com.github.dockerjava.api.model.AuthConfig;
-import com.github.dockerjava.api.model.Container;
-import com.github.dockerjava.api.model.Image;
-import com.github.dockerjava.api.model.PushResponseItem;
-import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
-import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
-import io.meighen.service_bulder.service.producers.TemplateCreateDeployment;
-import org.apache.commons.lang.SystemUtils;
+import io.meighen.service_bulder.entity.TemplateCreateDeployment;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 
@@ -77,6 +64,7 @@ public class BuildImage {
 //        auth.setUsername("c.m.batup.dj_test");
 //        auth.setServerAddress("dockertest00");
 
+        //TODO: DISCOMMENT! ACHTUNG+
         dockerClient.pushImageCmd(registryURL+"/"+name)     // <=== THIS IS LINE 58
 //                .withAuthConfig(auth)
                 .withName(registryURL+"/"+name)

@@ -9,7 +9,7 @@ import java.util.Collections
 class KuberDeployment_S {
 
   def delete(name: String): Unit = {
-    val config = new ConfigBuilder().withMasterUrl("https://127.0.0.1:2868").build
+    val config = new ConfigBuilder().withMasterUrl("https://127.0.0.1:4095").build
     try {
       val client = new KubernetesClientBuilder().build
       try {
@@ -20,14 +20,15 @@ class KuberDeployment_S {
           Thread.sleep(1000)
         }
       } catch {
-        case e: InterruptedException =>
-          throw new RuntimeException(e)
+        case e: Exception => print("there was an error!")
+//        case e: InterruptedException =>
+//          throw new RuntimeException(e)
       } finally if (client != null) client.close()
     }
   }
 
   def create(name: String, imgFrom: String, containerPort: Integer): Unit = {
-    val config = new ConfigBuilder().withMasterUrl("https://127.0.0.1:2868").build
+    val config = new ConfigBuilder().withMasterUrl("https://127.0.0.1:4095").build
 
     try {
       val client = new KubernetesClientBuilder().withConfig(config).build

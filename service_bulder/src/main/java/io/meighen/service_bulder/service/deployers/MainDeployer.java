@@ -3,7 +3,9 @@ package io.meighen.service_bulder.service.deployers;
 import io.meighen.service_bulder.docker.BuildImage;
 import io.meighen.service_bulder.kubernetes.MyKuber.CreateDeployment;
 import io.meighen.service_bulder.kubernetes.MyKuber.CreateService;
-import io.meighen.service_bulder.service.producers.TemplateCreateDeployment;
+import io.meighen.service_bulder.repository.ModuleInfoReposirory;
+import io.meighen.service_bulder.repository.ModuleRepository;
+import io.meighen.service_bulder.entity.TemplateCreateDeployment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,12 @@ public class MainDeployer {
 
     @Autowired
     CreateService createService;
+
+    @Autowired
+    ModuleRepository moduleRepository;
+
+    @Autowired
+    ModuleInfoReposirory moduleInfoReposirory;
 
     public void deploy(String name) {
 //        try {

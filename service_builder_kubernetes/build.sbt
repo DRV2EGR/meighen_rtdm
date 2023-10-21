@@ -4,7 +4,7 @@ lazy val root = project
   .in(file("."))
   .settings(
     name := "service_builder_kubernetes",
-    version := "0.1.0-SNAPSHOT",
+//    version := "0.1.0",
 
     scalaVersion := scala3Version,
 
@@ -19,3 +19,8 @@ lazy val root = project
       "io.circe" %% "circe-parser" % "0.14.3"
     )
   )
+
+assemblyMergeStrategy in assembly := {
+  case PathList("META-INF", _*) => MergeStrategy.discard
+  case _                        => MergeStrategy.first
+}

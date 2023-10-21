@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import TextField from "@material-ui/core/TextField";
 import { Cookies } from "react-cookie";
+import toast from "react-hot-toast";
 
 class ModuleCreator extends Component {
   myAttrs = {
@@ -23,6 +24,16 @@ class ModuleCreator extends Component {
   }
 
   async handleClickCreate(e) {
+    await toast.promise(
+      this.handleClickCreate0(e),
+      {
+        loading: 'Создаем объект',
+        success: <b>Создан!</b>,
+        error: <b>Не удалось создать :(</b>,
+      }
+    );
+  }
+  async handleClickCreate0(e) {
     // e.preventDefault();
     const cookies = new Cookies();
     let a = cookies.get('accessToken');
@@ -37,7 +48,7 @@ class ModuleCreator extends Component {
         }
       }).then(response => {
         if (!response.ok) {
-          //throw new Error('Network response was not OK');
+          throw "";
           return response;
         }
         return response.json();
@@ -51,7 +62,7 @@ class ModuleCreator extends Component {
         }
       }).then(response => {
         if (!response.ok) {
-          //throw new Error('Network response was not OK');
+          throw "";
           return response;
         }
         return response.json();

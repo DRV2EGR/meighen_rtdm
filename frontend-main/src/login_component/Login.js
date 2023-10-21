@@ -26,6 +26,7 @@ import PropTypes from "prop-types";
 import {useNavigate} from 'react-router-dom';
 // import {withRouter} from 'react-router';
 import './login.css';
+import toast from "react-hot-toast";
 
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080/api';
 
@@ -221,6 +222,11 @@ class Login extends Component {
         if (!(token.status == 403)) {
             token = token;
         } else {
+            if (token.status == 403) {
+                toast.error('Ошибка входа, неверный логин/пароль!')
+            } else {
+                toast.error('Ошибка входа, попробуйте еще раз!')
+            }
             this.setState({logerr: ""})
         }
 
@@ -247,6 +253,7 @@ class Login extends Component {
             // window.open("/insert/your/path/here");
 
             window.location = '/';
+            toast.success('Успешная авторизация!')
         }
         // console.log(cookies.get('accessToken'));
         // console.log(cookies.get('refreshToken'));

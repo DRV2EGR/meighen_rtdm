@@ -3,6 +3,7 @@ import './main_page.css';
 import Header from "../header/Header";
 import ChoserBar from "../working/choserBar/ChoserBar";
 import Cookies from "universal-cookie/es6";
+import Footer from "../footer/Footer";
 
 
 class MainPage extends Component {
@@ -28,9 +29,13 @@ class MainPage extends Component {
     render() {
         const {code, description} = this.state;
         return (
-            <div>
+            <div className="root-div-page">
                 <Header />
-                <br />
+                <div className="my-flex-1">
+
+                </div>
+                {/*<article contentEditable>Content</article>*/}
+                <Footer />
             </div>
         );
     }
