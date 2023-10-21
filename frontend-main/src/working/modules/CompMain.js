@@ -11,6 +11,8 @@ import AuthElement from "../../auth_element/AuthElement";
 import EurekaElement from "../../eureka/EurekaElement";
 import { Cookies } from "react-cookie";
 import ModulesRedacter from "./modulesRedacter/ModulesRedacter";
+import ModulesDeploy from "./modulesDeploy/ModulesDeploy";
+import toast from "react-hot-toast";
 
 
 class CompMain extends Component {
@@ -57,19 +59,26 @@ class CompMain extends Component {
     }
 
     async handleEnableRedacting(id) {
+        console.log(id);
+        console.log("IF: ", id?._reactName=="onClick");
+
         let redacter = {
             uuid: id,
             type: this.state.currentPos,
             permissions: "rw",
-            obj: await this.loadInfoByUUID(id)
+            obj: ((id?._reactName=="onClick")?null:(await this.loadInfoByUUID(id))),
         };
 
         console.log("REDACTER: ", redacter);
 
-        await this.setState({
-            redacters: redacter,
-            this_typr: redacter.obj.iinternal
-        });
+        try {
+            await this.setState({
+                redacters: redacter,
+                this_typr: redacter.obj.iinternal
+            });
+        } catch (e) {
+            // Pass
+        }
 
         if (!this.state.redacterMode) {
             await this.setState({redacterMode:true, redacterEnabled:"dnn", redacterTabClass:""});
@@ -94,6 +103,14 @@ class CompMain extends Component {
         }).then(response => {
             if (!response.ok) {
                 //throw new Error('Network response was not OK');
+                toast((t) => (
+                  <div className="toaster-dismiss">
+                      <span><b>Не удалось получить валидный ответ от сервера!</b><br/> Отображение может быть неактуальным.</span>
+                    <button className="button-dismiss" onClick={() => toast.dismiss(t.id)}>
+                      Скрыть
+                    </button>
+                  </div>
+                ));
                 return response;
             }
             return response.json();
@@ -118,6 +135,12 @@ class CompMain extends Component {
                 />;
             case "variables":
                 return <ModuleSearch statIn='переменные' fsttIn='variables' orderBy={this.state.orderer}
+                                     compsArray={this.state.objects} updater={this.handlePageChange}
+                                     mpgs={this.state.maxPages} visibleSearch={this.state.redacterEnabled}
+                                     enableRedactMode={this.handleEnableRedacting}
+                />;
+            case "management":
+                return <ModulesDeploy statIn='модули' fsttIn='management' orderBy={this.state.orderer}
                                      compsArray={this.state.objects} updater={this.handlePageChange}
                                      mpgs={this.state.maxPages} visibleSearch={this.state.redacterEnabled}
                                      enableRedactMode={this.handleEnableRedacting}
@@ -163,6 +186,14 @@ class CompMain extends Component {
         }).then(response => {
             if (!response.ok) {
                 //throw new Error('Network response was not OK');
+                toast((t) => (
+                  <div className="toaster-dismiss">
+                      <span><b>Не удалось получить валидный ответ от сервера!</b><br/> Отображение может быть неактуальным.</span>
+                      <button className="button-dismiss" onClick={() => toast.dismiss(t.id)}>
+                          Скрыть
+                      </button>
+                  </div>
+                ));
                 return response;
             }
             return response.json();
@@ -210,6 +241,14 @@ class CompMain extends Component {
         }).then(response => {
             if (!response.ok) {
                 //throw new Error('Network response was not OK');
+                toast((t) => (
+                  <div className="toaster-dismiss">
+                      <span><b>Не удалось получить валидный ответ от сервера!</b><br/> Отображение может быть неактуальным.</span>
+                      <button className="button-dismiss" onClick={() => toast.dismiss(t.id)}>
+                          Скрыть
+                      </button>
+                  </div>
+                ));
                 return response;
             }
             return response.json();

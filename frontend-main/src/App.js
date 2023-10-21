@@ -12,12 +12,14 @@ import CompMain from "./working/modules/CompMain";
 import EurekaElement from "./eureka/EurekaElement";
 import CanvMain from "./working/modules/modulesRedacter/canvMain/CanvMain";
 import DiagramFromJson from "./working/modules/modulesRedacter/canvMain/DiagramFromJson";
+import { Toaster } from "react-hot-toast";
+import AboutElement from "./about/AboutElement";
 // import DragAndDropSidebar from "./working/modules/modulesRedacter/canvMain/flowDiagram/DragAndDropSidebar";
 class App extends Component {
 
     async componentDidMount() {
         // client.logger.level('debug');
-        await EurekaElement.initEureka();
+        // await EurekaElement.initEureka();
         // EurekaElement.getInstanceGuarder();
     }
 
@@ -38,6 +40,8 @@ class App extends Component {
                     {/*<Route exact path={'/draw3'} component={DragAndDropSidebar} />*/}
 
                     {/*<Route exact path={'/draw3'} component={BodyWidget} />*/}
+
+                    <Route exact path={'/about'} component={AboutElement} />
 
                     <Route>
                         <ErrorPage code={404} description={'Страница не найдена.'}/>

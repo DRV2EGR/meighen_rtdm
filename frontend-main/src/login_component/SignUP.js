@@ -19,6 +19,7 @@ import Header from "../header/Header";
 import Cookies from "universal-cookie";
 import MenuItem from "react-bootstrap/lib/MenuItem";
 
+import './SignUp.css';
 
 const useStyles = (theme) => ({
     paper: {
@@ -214,7 +215,7 @@ class SignUP extends Component {
                             <p className="mb-1 h-1">Зарегистрироваться.</p>
                             <p className="text-muted mb-2">Зарегистрируйтесть, чтобы получить доступ к платформе!</p>
                             <div className="d-flex flex-column ">
-                                <p className="text-muted mb-2">Продолжить как...</p>
+                                {/*<p className="text-muted mb-2">Продолжить как...</p>*/}
                                 {/*<div className="d-flex align-items-center"><a href="#"*/}
                                 {/*                                              className="box me-2 selectio"> <span*/}
                                 {/*    className="fab fa-facebook-f mb-2"></span>*/}

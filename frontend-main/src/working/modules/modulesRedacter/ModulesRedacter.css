@@ -333,7 +333,7 @@ input[type=text], select, textarea {
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    resize: vertical;
+    resize: none;
 }
 
 label {
@@ -446,4 +446,8 @@ form {
 .m-node-lbl {
     margin-bottom: 0;
     padding: 0;
+}
+
+.scripts_text_new {
+    height: calc(100vh - 280px);
 }

@@ -1,0 +1,20 @@
+This instrument made to deploy Meighen RTDM system to your server!
+
+Usage:
+    local_env_start.bat [ -m | -p | -g | -f | -b | -d | -e | -a | --docker | -h | --help]
+
+Options:
+    -m              Creates eureka and gateway service
+    -p              Creates presenter service
+    -g              Creates guarder service
+    -f              Creates frontend (3000 port) service
+    -b              Creates service_builder (connects to docker) service
+    -d <NOT WORKS!> Creates deployer service
+    -e              Creates environment (local minikube and registry)
+
+    -a              Creates all services (all options included)
+
+    --docker        Creates local services in docker containers (includes Database)
+                    Make sure you entered config in .env file!
+
+    -h --help       Displays help message.

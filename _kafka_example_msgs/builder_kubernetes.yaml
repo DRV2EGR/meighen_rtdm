@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-builder-kuber
+spec:
+  selector:
+    app: app-builder-kuber
+  ports:
+    - port: 8080
+      targetPort: 8080
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-builder-kuber
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-builder-kuber
+  template:
+    metadata:
+      labels:
+        app: app-builder-kuber
+    spec:
+      containers:
+      - name: app
+        image: drv2vna/service_builder_kubernetes:latest
+        ports:
+          - containerPort: 9092
+        env:
+          - name: KAFKA_URL
+            value: kafka
+        imagePullPolicy: Always
+

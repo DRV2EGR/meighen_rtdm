@@ -5,6 +5,7 @@ import AuthElement from "../auth_element/AuthElement";
 import SignUP from "../login_component/SignUP";
 import Login from "../login_component/Login";
 import {Slide} from "@material-ui/core";
+import { Toaster } from "react-hot-toast";
 
 class Header extends Component {
     constructor(props) {
@@ -38,9 +39,12 @@ class Header extends Component {
         let a = cookies.get('accessToken');
 
         if (a) {
-            return <div><a href="/cabinet" className="ma">
-                <button className="button-27" role="button">В кабинет -></button>
-            </a><button className="button-27" role="button" onClick={this.logout}>Выйти</button></div>;
+            return <div>
+                <a href="/cabinet" className="ma">
+                    <input type="image" src="https://cdn-icons-png.flaticon.com/512/6073/6073873.png" className="button-header-exit" role="button"></input>
+                </a>
+                <input type="image" src="https://cdn-icons-png.flaticon.com/512/9010/9010568.png" className="button-header-exit" role="button" onClick={this.logout}></input>
+            </div>;
         } else {
             return <div>
                     <a href="/about" className="btn-my-lgn colored">
@@ -71,6 +75,8 @@ class Header extends Component {
         return (
 
             <header>
+
+                <div><Toaster/></div>
                 <svg xmlns="http://www.w3.org/2000/svg" className="nnn">
                     <symbol id="meighen" viewBox="0 0 118 94">
                         <title>Meighen</title>

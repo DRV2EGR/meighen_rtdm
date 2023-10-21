@@ -1,0 +1,189 @@
+version: '3.7'
+
+services:     
+  presenter:
+    build:
+      context: presenter #
+      dockerfile: Dockerfile
+    restart: always
+    depends_on: 
+      - db 
+      - eureka
+      - gateway
+    environment: 
+      KAFKA_URL: mgn-kafka
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: postgres
+      DB_USERNAME: $DB_USER
+      DB_PASSWORD: $DB_PASSWORD
+      eureka.client.serviceUrl.defaultZone: http://eureka:8761/eureka
+    networks: # Networks to join (Services on the same network can communicate with each other using their name)
+      - backend
+      - frontend
+      - db
+
+  guarder:
+    build:
+      context: guarder #
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    restart: always
+    depends_on: 
+      - db 
+      - eureka
+      - gateway
+    environment: 
+      KAFKA_URL: mgn-kafka
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: postgres
+      DB_USERNAME: $DB_USER
+      DB_PASSWORD: $DB_PASSWORD
+      eureka.client.serviceUrl.defaultZone: http://eureka:8761/eureka
+    networks: # Networks to join (Services on the same network can communicate with each other using their name)
+      - backend
+      - frontend
+      - db
+
+  service_bulder:
+    build:
+      context: service_bulder #
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8085"
+    volumes:
+      - "./tmp-dir:/tempa"
+    restart: always
+    # network_mode: "host"
+    depends_on: 
+      - db 
+      - eureka
+      - gateway
+    environment: 
+      KAFKA_URL: mgn-kafka
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: postgres
+      DB_USERNAME: $DB_USER
+      DB_PASSWORD: $DB_PASSWORD
+      eureka.client.serviceUrl.defaultZone: http://eureka:8761/eureka
+    networks: # Networks to join (Services on the same network can communicate with each other using their name)
+      - backend
+    #   - frontend
+      - db
+
+  frontend-main:
+    build:
+      context: frontend-main
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_API_BASE_URL: http://127.0.0.1:8080/
+    ports:
+      - "80:80"
+    # volumes:
+    #   - "./frontend-main:/usr/src/app1"
+    restart: always
+    depends_on:
+      - presenter
+    networks:
+      - frontend  
+
+  eureka:
+    build:
+      context: eureka #
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    environment:
+      instance.hostname: eureka
+    restart: always
+    depends_on: 
+      - db 
+    networks: # Networks to join (Services on the same network can communicate with each other using their name)
+      - backend
+      - frontend
+    #   - db
+
+  gateway:
+    build:
+      context: gateway #
+      dockerfile: Dockerfile
+    ports:
+      - "8760:8760"
+    environment:
+      - EUREKA_SERVER=http://eureka:8761/eureka
+    restart: always
+    depends_on: 
+      - db 
+      - eureka
+    networks: # Networks to join (Services on the same network can communicate with each other using their name)
+      - backend
+      - frontend
+    #   - db
+
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: db
+    environment:
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_USER: $DB_USER
+      POSTGRES_PASSWORD: $DB_PASSWORD
+    ports:
+      - "5432:5432"
+    volumes:
+      - "./pgdata:/var/lib/postgresql/data"
+    networks:
+      - db
+    restart: always
+
+  mgn-zookeeper:
+    image: wurstmeister/zookeeper
+    hostname: mgn-zookeeper
+    container_name: mgn-zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+      - backend
+    environment:
+        ZOO_MY_ID: 1
+        ZOO_PORT: 2181
+        ZOO_SERVERS: server.1=mgn-zookeeper:2888:3888
+        restart: always
+    volumes:
+      - ./zk-single-kafka-single/zookeeper/data:/data
+      - ./zk-single-kafka-single/zookeeper/datalog:/datalog
+
+  mgn-kafka:
+      image: wurstmeister/kafka
+      hostname: mgn-kafka
+      container_name: mgn-kafka
+      ports:
+        - "9092:9092"
+      networks:
+        - backend
+      environment:
+        # HOSTNAME_COMMAND: kafka #"docker info | grep ^Name: | cut -d' ' -f 2"
+        KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://mgn-kafka:9092 #,LISTENER_DOCKER_EXTERNAL://_{HOSTNAME_COMMAND}:9094
+        KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+        KAFKA_ZOOKEEPER_CONNECT: "mgn-zookeeper:2181"
+        KAFKA_LISTENERS: LISTENER_DOCKER_INTERNAL://:9092,LISTENER_DOCKER_EXTERNAL://:9094
+        KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+        # KAFKA_ADVERTISED_HOST_NAME: 172.19.0.1
+        KAFKA_BROKER_ID: 1
+        KAFKA_LOG4J_LOGGERS: "mgn-kafka.controller=INFO,mgn-kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+        KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+        restart: always
+      volumes:
+        - ./zk-single-kafka-single/kafka/data:/var/lib/kafka/data
+      depends_on:
+        - mgn-zookeeper
+# Networks to be created to facilitate communication between containers
+networks:
+  backend:
+    driver: bridge
+  frontend:
+    driver: bridge
+  db:
+    driver: bridge

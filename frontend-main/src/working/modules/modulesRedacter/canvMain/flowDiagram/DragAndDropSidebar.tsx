@@ -330,9 +330,9 @@ const DragAndDropSidebar = () => (
       />
     </Content>
     <Sidebar>
-      <Message>
-        Drag and drop these items onto the canvas.
-      </Message>
+      {/*<Message>*/}
+      {/*  Drag and drop these items onto the canvas.*/}
+      {/*</Message>*/}
       <SidebarItem type="start" ports={startPoint} itemStyle={startItemStyle} />
       <SidebarItem type="process-queue" ports={processQueuePoint} />
       <SidebarItem type="process-point"  ports={processPoint} />
@@ -342,3 +342,4 @@ const DragAndDropSidebar = () => (
 )
 
 export default DragAndDropSidebar;
+

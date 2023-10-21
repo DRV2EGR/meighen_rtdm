@@ -42,11 +42,16 @@ class ModuleSearch extends Component {
                 // arr.push(<td><a href='./$namehref'>$extn</a></td>);
                 // arr.push(<td><a href='./$namehref'>$size</a></td>);
                 // arr.push(<td><a href='./$namehref'>$modtime</a></td>);
+                let d = new Date(yer[i].dateModification);
 
                 let name = yer[i].name;
-                let dateModif = yer[i].dateModification;
+                let dateModif = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
+                  d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);;
                 let modifier = yer[i].lastModifier.lastName + " " + yer[i].lastModifier.firstName[0] + "." + yer[i].lastModifier.secondName[0] + ".";
-                let intOrExt = yer[i].iinternal?"Внутренний":"Внешний";
+                let intOrExt = "-";
+                if (this.props.statIn == "модули") {
+                    intOrExt = !yer[i].iinternal ? "Внешний" : "Внутренний";
+                }
                 console.log("elem: ", yer[i])
 
                 arr.push(<tr className='$class' onClick={ this.handleSelectObject} id={yer[i].uuid}>
